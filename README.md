@@ -5,6 +5,7 @@
 
 # Requirements
 
+- Must be installed to /usr! Polkit and DBus hardcode /usr as source for policies and system services
 - https://invent.kde.org/frameworks/kio/-/merge_requests/941
 - https://invent.kde.org/system/kio-fuse/-/merge_requests/65
 
