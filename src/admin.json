@@ -1,0 +1,33 @@
+{
+    "KDE-KIO-Protocols": {
+        "admin": {
+            "Class": ":local",
+            "ExtraNames": [],
+            "Icon": "folder",
+            "deleteRecursive": true,
+            "deleting": true,
+            "input": "none",
+            "linking": false,
+            "listing": [
+                "Name",
+                "Type",
+                "Size",
+                "Date",
+                "AccessDate",
+                "Access",
+                "Owner",
+                "Group",
+                "Link"
+            ],
+            "makedir": true,
+            "maxInstances": 5,
+            "opening": true,
+            "moving": true,
+            "truncating": false,
+            "output": "filesystem",
+            "protocol": "admin",
+            "reading": true,
+            "writing": true
+        }
+    }
+}
