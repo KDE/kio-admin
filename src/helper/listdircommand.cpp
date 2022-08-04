@@ -22,6 +22,9 @@ void ListDirCommand::start()
     }
 
     auto job = KIO::listDir(m_url);
+    // Since we aren't file: proper we need to ensure that a mimetype is available. Otherwise KIO has a hard time guessing
+    // what is going on and can end up without a mimetype.
+    job->addMetaData(QStringLiteral("statDetails"), QString::number(KIO::StatDefaultDetails | KIO::StatMimeType));
     setParent(job);
     connect(job, &KIO::ListJob::entries, this, [this](KIO::Job *, const KIO::UDSEntryList &list) {
         sendSignal(&ListDirCommand::entries, list);

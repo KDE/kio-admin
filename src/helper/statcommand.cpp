@@ -21,6 +21,9 @@ void StatCommand::start()
 
     auto job = KIO::stat(m_url);
     setParent(job);
+    // Since we aren't file: proper we need to ensure that a mimetype is available. Otherwise KIO has a hard time guessing
+    // what is going on and can end up without a mimetype.
+    job->addMetaData(QStringLiteral("statDetails"), QString::number(KIO::StatDefaultDetails | KIO::StatMimeType));
     connect(job, &KIO::StatJob::result, this, [this, job](KJob *) {
         if (job->error() == KJob::NoError) {
             sendSignal(&StatCommand::statEntry, job->statResult());
