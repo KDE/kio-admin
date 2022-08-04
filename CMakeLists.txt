@@ -15,9 +15,7 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core)
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
-    KIO
-)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS KIO)
 
 set(QT_MAJOR_VERSION 5)
 
@@ -34,5 +32,7 @@ include(ECMOptionalAddSubdirectory)
 include(ECMQtDeclareLoggingCategory)
 
 add_subdirectory(src)
+
+install(FILES org.kde.kio.admin.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

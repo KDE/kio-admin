@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SPDX-License-Identifier: FSFAP
+  SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
+ -->
+<component type="addon">
+  <id>org.kde.kio.admin</id>
+  <extends>org.kde.kio</extends>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>KIO Admin</name>
+  <summary>Enables administrative access for KIO-enabled applications</summary>
+  <description>
+    <p>KIO Admin is a KIO worker plugin that enables KIO-aware applications (such as Dolphin, Kate or Gwenview) to access files as administrator/root.</p>
+  </description>
+  <project_group>KDE</project_group>
+  <developer_name>Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
+  <categories>
+    <category>System</category>
+  </categories>
+</component>
