@@ -31,7 +31,3 @@ kcoreaddons_add_plugin(admin SOURCES worker.cpp dbustypes.cpp ${admin_SRCS} INST
 target_link_libraries(admin KF5::KIOCore)
 set_target_properties(admin PROPERTIES OUTPUT_NAME "admin")
 set_target_properties(admin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/kf5/kio")
-
-add_executable(filetest filetest.cpp)
-target_link_libraries(filetest
-    KF5::KIOCore)
