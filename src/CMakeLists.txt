@@ -3,6 +3,7 @@
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kio5_admin\")
 
+add_subdirectory(fileaction)
 add_subdirectory(helper)
 
 macro(generate_and_use_interfaces)
