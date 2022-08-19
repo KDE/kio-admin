@@ -6,8 +6,8 @@
 #include <QDBusContext>
 #include <QDBusMessage>
 
-#include <polkit-qt5-1/polkitqt1-agent-session.h>
-#include <polkit-qt5-1/polkitqt1-authority.h>
+#include <polkitqt1-agent-session.h>
+#include <polkitqt1-authority.h>
 
 bool isAuthorized(QDBusContext *context)
 {
