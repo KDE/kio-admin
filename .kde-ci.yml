@@ -6,4 +6,4 @@ Dependencies:
   'require':
     'frameworks/extra-cmake-modules': '@latest'
     'frameworks/kio': '@latest'
-    'libraries/polkit-qt-1' : '@latest'
+    'libraries/polkit-qt-1': '@latest'
