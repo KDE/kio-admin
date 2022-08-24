@@ -41,7 +41,7 @@ public:
         for (const auto &item : items) {
             auto url = item.url();
             url.setScheme(QStringLiteral("admin"));
-            if (item.isDir() && fileItemInfos.items().size() <= 1) {
+            if (item.isDir() && fileItemInfos.items().size() <= 1 && url.path() != QLatin1String("/")) {
                 // Descend into the directory immediately if it is the only selected item...
                 url.setPath(url.path() + QLatin1String("/"));
             }
