@@ -28,7 +28,7 @@ public:
         }
 
         auto action = new QAction(i18nc("@action", "Open as Administrator"), parentWidget);
-        action->setIcon(QIcon::fromTheme(QStringLiteral("gcr-key")));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("yast-auth-client")));
         QList<QUrl> urls;
         const auto items = fileItemInfos.items();
         for (const auto &item : items) {
