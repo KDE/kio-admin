@@ -3,6 +3,7 @@
 
 #include <QAction>
 #include <QDebug>
+#include <QDir>
 
 #include <KAbstractFileItemActionPlugin>
 #include <KFileItem>
@@ -26,11 +27,17 @@ public:
         if (!fileItemInfos.isLocal()) {
             return {};
         }
+        const auto items = fileItemInfos.items();
+        if (std::all_of(items.cbegin(), items.cend(), [](const KFileItem &item) {
+                auto url = item.mostLocalUrl();
+                return url.path().startsWith(QDir::homePath());
+            })) {
+            return {};
+        }
 
         auto action = new QAction(i18nc("@action", "Open as Administrator"), parentWidget);
         action->setIcon(QIcon::fromTheme(QStringLiteral("yast-auth-client")));
         QList<QUrl> urls;
-        const auto items = fileItemInfos.items();
         for (const auto &item : items) {
             auto url = item.url();
             url.setScheme(QStringLiteral("admin"));
