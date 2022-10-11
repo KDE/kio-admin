@@ -95,7 +95,6 @@ public:
             return WorkerResult::fail();
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
-        qDebug() << path;
 
         m_file = std::make_unique<OrgKdeKioAdminFileInterface>(serviceName(), path, QDBusConnection::systemBus(), this);
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::opened, this, [this] { result(0, {}); });
