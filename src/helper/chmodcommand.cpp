@@ -5,11 +5,7 @@
 
 #include <KIO/SimpleJob>
 
-ChmodCommand::ChmodCommand(const QUrl &url,
-                           int permissions,
-                           const QString &remoteService,
-                           const QDBusObjectPath &objectPath,
-                           QObject *parent)
+ChmodCommand::ChmodCommand(const QUrl &url, int permissions, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)
     , m_permissions(permissions)

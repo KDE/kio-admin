@@ -5,11 +5,7 @@
 
 #include <KIO/MkdirJob>
 
-MkdirCommand::MkdirCommand(const QUrl &url,
-                           int permissions,
-                           const QString &remoteService,
-                           const QDBusObjectPath &objectPath,
-                           QObject *parent)
+MkdirCommand::MkdirCommand(const QUrl &url, int permissions, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)
     , m_permissions(permissions)

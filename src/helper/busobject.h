@@ -21,11 +21,10 @@ protected:
     {
         auto method = QMetaMethod::fromSignal(signal);
         Q_ASSERT(method.isValid());
-        auto message = QDBusMessage::createTargetedSignal(
-            m_remoteService,
-            m_objectPath.path(),
-            QLatin1String(metaObject()->classInfo(metaObject()->indexOfClassInfo("D-Bus Interface")).value()),
-            QLatin1String(method.name()));
+        auto message = QDBusMessage::createTargetedSignal(m_remoteService,
+                                                          m_objectPath.path(),
+                                                          QLatin1String(metaObject()->classInfo(metaObject()->indexOfClassInfo("D-Bus Interface")).value()),
+                                                          QLatin1String(method.name()));
         ((message << QVariant::fromValue(args)), ...);
         QDBusConnection::systemBus().send(message);
     }

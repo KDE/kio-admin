@@ -25,7 +25,6 @@
 #include "renamecommand.h"
 #include "statcommand.h"
 
-
 static QUrl stringToUrl(const QString &stringUrl)
 {
     QUrl url(stringUrl);
@@ -69,7 +68,8 @@ public Q_SLOTS:
         Q_ASSERT(counter != 0);
 
         const QDBusObjectPath objPath(QStringLiteral("/org/kde/kio/admin/stat/%1").arg(QString::number(counter)));
-        auto command = new StatCommand(stringToUrl(stringUrl), message().service(), objPath);;
+        auto command = new StatCommand(stringToUrl(stringUrl), message().service(), objPath);
+        ;
         connection().registerObject(objPath.path(), command, QDBusConnection::ExportAllSlots);
         return objPath;
     }

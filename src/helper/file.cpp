@@ -5,11 +5,7 @@
 
 #include <KIO/FileJob>
 
-File::File(const QUrl &url,
-           QIODevice::OpenMode openMode,
-           const QString &remoteService,
-           const QDBusObjectPath &objectPath,
-           QObject *parent)
+File::File(const QUrl &url, QIODevice::OpenMode openMode, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)
     , m_openMode(openMode)
@@ -25,8 +21,12 @@ void File::open()
 
     m_job = KIO::open(m_url, m_openMode);
     setParent(m_job);
-    connect(m_job, &KIO::FileJob::open, this, [this] { sendSignal(&File::opened); });
-    connect(m_job, &KIO::FileJob::fileClosed, this, [this] { sendSignal(&File::closed); });
+    connect(m_job, &KIO::FileJob::open, this, [this] {
+        sendSignal(&File::opened);
+    });
+    connect(m_job, &KIO::FileJob::fileClosed, this, [this] {
+        sendSignal(&File::closed);
+    });
     connect(m_job, &KIO::FileJob::data, this, [this](KIO::Job *, const QByteArray &blob) {
         sendSignal(&File::data, blob);
     });

@@ -5,10 +5,7 @@
 
 #include <KIO/TransferJob>
 
-GetCommand::GetCommand(const QUrl &url,
-                       const QString &remoteService,
-                       const QDBusObjectPath &objectPath,
-                       QObject *parent)
+GetCommand::GetCommand(const QUrl &url, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)
 {

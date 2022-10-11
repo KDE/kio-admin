@@ -26,7 +26,7 @@
 
 using namespace KIO;
 
-class AdminWorker :  public QObject, public WorkerBase
+class AdminWorker : public QObject, public WorkerBase
 {
     Q_OBJECT
 public:
@@ -49,8 +49,7 @@ public:
 
     WorkerResult listDir(const QUrl &url) override
     {
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("listDir"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("listDir"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -64,11 +63,11 @@ public:
         connect(&iface, &OrgKdeKioAdminListDirCommandInterface::result, this, &AdminWorker::result);
 
         QDBusConnection::systemBus().connect(serviceName(),
-                                              path,
-                                              QStringLiteral("org.kde.kio.admin.ListDirCommand"),
-                                              QStringLiteral("entries"),
-                                              this,
-                                              SLOT(entries(KIO::UDSEntryList)));
+                                             path,
+                                             QStringLiteral("org.kde.kio.admin.ListDirCommand"),
+                                             QStringLiteral("entries"),
+                                             this,
+                                             SLOT(entries(KIO::UDSEntryList)));
 
         iface.start();
 
@@ -86,8 +85,7 @@ public:
     WorkerResult open(const QUrl &url, QIODevice::OpenMode mode) override
     {
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("file"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("file"));
         request << url.toString() << (int)mode;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -97,7 +95,9 @@ public:
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
         m_file = std::make_unique<OrgKdeKioAdminFileInterface>(serviceName(), path, QDBusConnection::systemBus(), this);
-        connect(m_file.get(), &OrgKdeKioAdminFileInterface::opened, this, [this] { result(0, {}); });
+        connect(m_file.get(), &OrgKdeKioAdminFileInterface::opened, this, [this] {
+            result(0, {});
+        });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::written, this, [this](qulonglong length) {
             written(length);
             Q_ASSERT(m_pendingWrite.has_value());
@@ -142,7 +142,7 @@ public:
         return m_result;
     }
 
-     WorkerResult write(const QByteArray &data) override
+    WorkerResult write(const QByteArray &data) override
     {
         qDebug() << Q_FUNC_INFO;
         Q_ASSERT(!m_pendingWrite.has_value());
@@ -178,8 +178,7 @@ public:
 
     WorkerResult put(const QUrl &url, int permissions, JobFlags flags) override
     {
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("put"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("put"));
         request << url.toString() << permissions << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -207,8 +206,7 @@ public:
 
     WorkerResult stat(const QUrl &url) override
     {
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("stat"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("stat"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -217,8 +215,8 @@ public:
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
-        QDBusConnection::systemBus().connect(
-            serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("statEntry"), this, SLOT(entry(KIO::UDSEntry)));
+        QDBusConnection::systemBus()
+            .connect(serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("statEntry"), this, SLOT(entry(KIO::UDSEntry)));
 
         OrgKdeKioAdminStatCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
         connect(&iface, &OrgKdeKioAdminStatCommandInterface::result, this, &AdminWorker::result);
@@ -229,9 +227,8 @@ public:
 
         loop.exec();
 
-
-        QDBusConnection::systemBus().disconnect(
-            serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("statEntry"), this, SLOT(entry(KIO::UDSEntry)));
+        QDBusConnection::systemBus()
+            .disconnect(serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("statEntry"), this, SLOT(entry(KIO::UDSEntry)));
 
         return m_result;
     }
@@ -239,8 +236,7 @@ public:
     WorkerResult copy(const QUrl &src, const QUrl &dest, int permissions, JobFlags flags) override
     {
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("copy"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("copy"));
         request << src.toString() << dest.toString() << permissions << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -261,8 +257,7 @@ public:
     WorkerResult get(const QUrl &url) override
     {
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("get"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("get"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -274,7 +269,8 @@ public:
 
         OrgKdeKioAdminGetCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
         connect(&iface, &OrgKdeKioAdminGetCommandInterface::data, this, [this](const QByteArray &blob) {
-            data(blob); });
+            data(blob);
+        });
         connect(&iface, &OrgKdeKioAdminGetCommandInterface::mimeTypeFound, this, [this](const QString &mimetype) {
             mimeType(mimetype);
         });
@@ -290,8 +286,7 @@ public:
         Q_UNUSED(isFile);
 
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("del"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("del"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -311,8 +306,7 @@ public:
     WorkerResult mkdir(const QUrl &url, int permissions) override
     {
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("mkdir"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("mkdir"));
         request << url.toString() << permissions;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -332,8 +326,7 @@ public:
     WorkerResult rename(const QUrl &src, const QUrl &dest, JobFlags flags) override
     {
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("rename"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("rename"));
         request << src.toString() << dest.toString() << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -355,8 +348,7 @@ public:
     WorkerResult chmod(const QUrl &url, int permissions) override
     {
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("chmod"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("chmod"));
         request << url.toString() << permissions;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -376,8 +368,7 @@ public:
     WorkerResult chown(const QUrl &url, const QString &owner, const QString &group) override
     {
         qDebug() << Q_FUNC_INFO;
-        auto request =
-            QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("chown"));
+        auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("chown"));
         request << url.toString() << owner << group;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -454,4 +445,3 @@ public:
 };
 
 #include "worker.moc"
-

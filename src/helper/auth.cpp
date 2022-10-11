@@ -15,9 +15,7 @@ bool isAuthorized(QDBusContext *context)
 
     auto authority = PolkitQt1::Authority::instance();
     PolkitQt1::Authority::Result result =
-        authority->checkAuthorizationSync(action,
-                                          PolkitQt1::SystemBusNameSubject(context->message().service()),
-                                          PolkitQt1::Authority::AllowUserInteraction);
+        authority->checkAuthorizationSync(action, PolkitQt1::SystemBusNameSubject(context->message().service()), PolkitQt1::Authority::AllowUserInteraction);
 
     if (authority->hasError()) {
         authority->clearError();

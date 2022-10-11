@@ -14,10 +14,7 @@ class StatCommand : public BusObject
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.kio.admin.StatCommand")
 public:
-    explicit StatCommand(const QUrl &url,
-                         const QString &remoteService,
-                         const QDBusObjectPath &objectPath,
-                         QObject *parent = nullptr);
+    explicit StatCommand(const QUrl &url, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent = nullptr);
 
 public Q_SLOTS:
     void start();

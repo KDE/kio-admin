@@ -3,10 +3,7 @@
 
 #include "statcommand.h"
 
-StatCommand::StatCommand(const QUrl &url,
-                         const QString &remoteService,
-                         const QDBusObjectPath &objectPath,
-                         QObject *parent)
+StatCommand::StatCommand(const QUrl &url, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)
 {

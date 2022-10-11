@@ -3,12 +3,7 @@
 
 #include "putcommand.h"
 
-PutCommand::PutCommand(const QUrl &url,
-                       int permissions,
-                       KIO::JobFlags flags,
-                       const QString &remoteService,
-                       const QDBusObjectPath &objectPath,
-                       QObject *parent)
+PutCommand::PutCommand(const QUrl &url, int permissions, KIO::JobFlags flags, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)
     , m_permissions(permissions)

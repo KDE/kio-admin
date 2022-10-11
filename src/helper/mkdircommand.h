@@ -12,11 +12,7 @@ class MkdirCommand : public BusObject
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.kio.admin.MkdirCommand")
 public:
-    explicit MkdirCommand(const QUrl &url,
-                          int permissions,
-                          const QString &remoteService,
-                          const QDBusObjectPath &objectPath,
-                          QObject *parent = nullptr);
+    explicit MkdirCommand(const QUrl &url, int permissions, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent = nullptr);
 
 public Q_SLOTS:
     void start();

@@ -38,9 +38,7 @@ public:
             return {};
         }
 
-        auto action = new QAction(QIcon::fromTheme(QStringLiteral("yast-auth-client")),
-                                  i18nc("@action", "Open as Administrator"),
-                                  parentWidget);
+        auto action = new QAction(QIcon::fromTheme(QStringLiteral("yast-auth-client")), i18nc("@action", "Open as Administrator"), parentWidget);
         QList<QUrl> urls;
         for (const auto &item : items) {
             auto url = item.url();
@@ -59,7 +57,6 @@ public:
         });
         return {action};
     }
-
 };
 
 K_PLUGIN_CLASS_WITH_JSON(Plugin, "fileaction.json")
