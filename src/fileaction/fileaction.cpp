@@ -19,6 +19,7 @@ public:
     explicit Plugin(QObject *parent = nullptr, const QVariantList &args = {})
         : KAbstractFileItemActionPlugin(parent)
     {
+        Q_UNUSED(args);
     }
 
     QList<QAction *> actions(const KFileItemListProperties &fileItemInfos, QWidget *parentWidget) override
