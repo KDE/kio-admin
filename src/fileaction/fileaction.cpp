@@ -4,6 +4,7 @@
 #include <QAction>
 #include <QDebug>
 #include <QDir>
+#include <QWidget>
 
 #include <KAbstractFileItemActionPlugin>
 #include <KFileItem>
@@ -37,8 +38,9 @@ public:
             return {};
         }
 
-        auto action = new QAction(i18nc("@action", "Open as Administrator"), parentWidget);
-        action->setIcon(QIcon::fromTheme(QStringLiteral("yast-auth-client")));
+        auto action = new QAction(QIcon::fromTheme(QStringLiteral("yast-auth-client")),
+                                  i18nc("@action", "Open as Administrator"),
+                                  parentWidget);
         QList<QUrl> urls;
         for (const auto &item : items) {
             auto url = item.url();

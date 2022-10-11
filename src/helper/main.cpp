@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<KIO::UDSEntry>("KIO::UDSEntry");
     qDBusRegisterMetaType<KIO::UDSEntry>();
 
-    KIO::setDefaultJobUiDelegateFactory(nullptr);
+    KIO::setDefaultJobUiDelegateFactoryV2(nullptr);
     KIO::setDefaultJobUiDelegateExtension(nullptr);
 
     Helper helper;
