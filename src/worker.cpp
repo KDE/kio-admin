@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
 
+#include <optional>
+
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QDBusPendingReply>
@@ -95,13 +97,15 @@ public:
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
         qDebug() << path;
 
-        m_file = std::make_unique<OrgKdeKioAdminFileInterface>(
-            serviceName(), path, QDBusConnection::systemBus(), this);
+        m_file = std::make_unique<OrgKdeKioAdminFileInterface>(serviceName(), path, QDBusConnection::systemBus(), this);
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::opened, this, [this] { result(0, {}); });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::written, this, [this](qulonglong length) {
-#warning fixme assuming write always writes everything! partial writes are not supported. is release blocker as it can cause data loss
             written(length);
-            loop.quit();
+            Q_ASSERT(m_pendingWrite.has_value());
+            m_pendingWrite.emplace(m_pendingWrite.value() - length);
+            if (m_pendingWrite.value() == 0) {
+                loop.quit();
+            }
             result(0, {});
         });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::data, this, [this](const QByteArray &blob) {
@@ -142,6 +146,8 @@ public:
      WorkerResult write(const QByteArray &data) override
     {
         qDebug() << Q_FUNC_INFO;
+        Q_ASSERT(!m_pendingWrite.has_value());
+        m_pendingWrite = data.size();
         m_file->write(data);
         loop.exec();
         return m_result;
@@ -173,7 +179,6 @@ public:
 
     WorkerResult put(const QUrl &url, int permissions, JobFlags flags) override
     {
-        qDebug() << Q_FUNC_INFO;
         auto request =
             QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("put"));
         request << url.toString() << permissions << static_cast<int>(flags);
@@ -183,7 +188,6 @@ public:
             return WorkerResult::fail();
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
-        qDebug() << path;
 
         OrgKdeKioAdminPutCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
 
@@ -423,6 +427,7 @@ private:
     WorkerResult m_result = WorkerResult::pass();
     std::unique_ptr<OrgKdeKioAdminFileInterface> m_file;
     QEventLoop loop;
+    std::optional<quint64> m_pendingWrite = std::nullopt;
 };
 
 class KIOPluginFactory : public KIO::RealWorkerFactory
