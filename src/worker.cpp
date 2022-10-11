@@ -194,7 +194,9 @@ public:
         connect(&iface, &OrgKdeKioAdminPutCommandInterface::dataRequest, this, [this, &iface]() {
             dataReq();
             QByteArray buffer;
-            const int read = readData(buffer);
+            if (const int read = readData(buffer); read < 0) {
+                qWarning() << "Failed to read data for unknown reason" << read;
+            }
             iface.data(buffer);
         });
         connect(&iface, &OrgKdeKioAdminPutCommandInterface::result, this, &AdminWorker::result);
