@@ -21,6 +21,8 @@ include(ECMMarkNonGuiExecutable)
 include(ECMMarkAsTest)
 include(ECMOptionalAddSubdirectory)
 include(ECMQtDeclareLoggingCategory)
+include(KDEClangFormat)
+include(KDEGitCommitHooks)
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS KIO I18n)
@@ -29,5 +31,9 @@ find_package(PolkitQt${QT_MAJOR_VERSION}-1 REQUIRED)
 add_subdirectory(src)
 
 install(FILES org.kde.kio.admin.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
