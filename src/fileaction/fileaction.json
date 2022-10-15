@@ -5,7 +5,14 @@
             "application/octet-stream",
             "inode/directory"
         ],
-        "Name": "Administrative Actions"
+        "Name": "Administrative Actions",
+        "Name[ca]": "Accions administratives",
+        "Name[es]": "Acciones administrativas",
+        "Name[eu]": "Ekintza administratiboak",
+        "Name[nl]": "Administratieve acties",
+        "Name[tr]": "Yönetimsel Eylemler",
+        "Name[uk]": "Дії з адміністрування",
+        "Name[x-test]": "xxAdministrative Actionsxx"
     },
     "MimeType": "application/octet-stream;inode/directory;"
 }
