@@ -6,11 +6,13 @@
             "inode/directory"
         ],
         "Name": "Administrative Actions",
+        "Name[ca@valencia]": "Accions administratives",
         "Name[ca]": "Accions administratives",
         "Name[es]": "Acciones administrativas",
         "Name[eu]": "Ekintza administratiboak",
         "Name[fr]": "Actions d'administration",
         "Name[nl]": "Administratieve acties",
+        "Name[pt]": "Acções de Administração",
         "Name[sl]": "Skrbniške dejavnosti",
         "Name[tr]": "Yönetimsel Eylemler",
         "Name[uk]": "Дії з адміністрування",
