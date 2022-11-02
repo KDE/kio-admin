@@ -29,6 +29,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS KIO I18n)
 find_package(PolkitQt${QT_MAJOR_VERSION}-1 REQUIRED)
 
 add_subdirectory(src)
+ki18n_install(po)
 
 install(FILES org.kde.kio.admin.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
