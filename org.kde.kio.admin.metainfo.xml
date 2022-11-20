@@ -11,6 +11,7 @@
   <name>KIO Admin</name>
   <name xml:lang="ca">KIO Admin</name>
   <name xml:lang="ca-valencia">KIO Admin</name>
+  <name xml:lang="de">KIO-Admin</name>
   <name xml:lang="es">KIO Admin</name>
   <name xml:lang="eu">KIO Admin</name>
   <name xml:lang="fr">KIO Admin</name>
@@ -28,6 +29,7 @@
   <summary>Enables administrative access for KIO-enabled applications</summary>
   <summary xml:lang="ca">Habilita l'accés d'administració per a les aplicacions que permeten el KIO</summary>
   <summary xml:lang="ca-valencia">Habilita l'accés d'administració per a les aplicacions que permeten KIO</summary>
+  <summary xml:lang="de">Systemverwalterrechte für KIO-fähige Anwendungen aktivieren</summary>
   <summary xml:lang="es">Activa el acceso de administrador en las aplicaciones que usan KIO</summary>
   <summary xml:lang="eu">KIO gaituta duten aplikazioetan sarbide administratiboa gaitzen du</summary>
   <summary xml:lang="fr">Active l'accès d'administrateur pour les applications intégrant « KIO »</summary>
@@ -45,6 +47,7 @@
     <p>KIO Admin is a KIO worker plugin that enables KIO-aware applications (such as Dolphin, Kate or Gwenview) to access files as administrator/root.</p>
     <p xml:lang="ca">El KIO Admin és un connector de procés de treball KIO que habilita les aplicacions preparades per al KIO (com el Dolphin, Kate o Gwenview) accedeixin als fitxers com a administrador/root.</p>
     <p xml:lang="ca-valencia">KIO Admin és un connector de procés de treball KIO que habilita les aplicacions preparades per a KIO (com Dolphin, Kate o Gwenview) accedisquen als fitxers com a administrador/root.</p>
+    <p xml:lang="de">KIO-Admin ist ein Ein-/Ausgabemodul, mit dem Anwendungen wie Dolphin, Kate oder Gwenview als Systemverwalter auf Dateien zugreifen und bearbeiten können.</p>
     <p xml:lang="es">KIO Admin es un complemento del módulo de trabajo KIO que activa el acceso como administrador/root en las aplicaciones que usan KIO (como Dolphin, Kate o Gwenview).</p>
     <p xml:lang="eu">KIO Admin KIO behargin plugin bat da, KIO-jakitun diren aplikazioek (Dolphin, Kate, Gwenview eta halakoak) fitxategiak administratzaile/root gisa atzitzea gaitzen duena.</p>
     <p xml:lang="fr">KIO Admin est un module externe de travail « KIO » permettant aux applications « KIO » (comme Dolphin, Kate ou Gwenview) d’accéder aux fichiers en tant qu’administrateur.</p>
@@ -63,6 +66,7 @@
   <developer_name>Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ca">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ca-valencia">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
+  <developer_name xml:lang="de">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="es">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="eu">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="fr">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
