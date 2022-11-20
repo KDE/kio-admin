@@ -1,24 +1,26 @@
 # German translations for kio-admin package.
 # Copyright (C) 2022 This file is copyright:
 # This file is distributed under the same license as the kio-admin package.
-# Automatically generated, 2022.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
 #
+# Automatically generated, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kio-admin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-14 00:49+0000\n"
-"PO-Revision-Date: 2022-10-14 09:38+0200\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-11-10 12:43+0100\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: fileaction/fileaction.cpp:41
 #, kde-format
 msgctxt "@action"
 msgid "Open as Administrator"
-msgstr ""
+msgstr "Als Administrator öffnen"
