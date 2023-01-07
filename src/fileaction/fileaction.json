@@ -25,7 +25,8 @@
         "Name[sl]": "Skrbniške dejavnosti",
         "Name[tr]": "Yönetimsel Eylemler",
         "Name[uk]": "Дії з адміністрування",
-        "Name[x-test]": "xxAdministrative Actionsxx"
+        "Name[x-test]": "xxAdministrative Actionsxx",
+        "Name[zh_TW]": "管理員動作"
     },
     "MimeType": "application/octet-stream;inode/directory;"
 }
