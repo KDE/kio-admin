@@ -9,6 +9,7 @@
   <metadata_license>FSFAP</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>KIO Admin</name>
+  <name xml:lang="ar">مدير KIO</name>
   <name xml:lang="be">KIO Admin</name>
   <name xml:lang="ca">KIO Admin</name>
   <name xml:lang="ca-valencia">KIO Admin</name>
@@ -31,6 +32,7 @@
   <name xml:lang="zh-CN">KIO 管理员</name>
   <name xml:lang="zh-TW">KIO Admin</name>
   <summary>Enables administrative access for KIO-enabled applications</summary>
+  <summary xml:lang="ar">تمكن الوصول كمدير/جذر لجميع التطبيقات التي تدعم KIO</summary>
   <summary xml:lang="be">Уключае доступ ад імя адміністратара для праграм з падтрымкай KIO</summary>
   <summary xml:lang="ca">Habilita l'accés d'administració per a les aplicacions que permeten el KIO</summary>
   <summary xml:lang="ca-valencia">Habilita l'accés d'administració per a les aplicacions que permeten KIO</summary>
@@ -53,6 +55,7 @@
   <summary xml:lang="zh-TW">為支援 KIO 的應用程式提供管理員存取權</summary>
   <description>
     <p>KIO Admin is a KIO worker plugin that enables KIO-aware applications (such as Dolphin, Kate or Gwenview) to access files as administrator/root.</p>
+    <p xml:lang="ar">مدير KIO هي ملحقة تمكّن التطبيقات المدركة لـ KIO (مثل دولفين أو كيت أو حونفيو) من الوصول إلى الملفات كمدير/جذر.</p>
     <p xml:lang="be">KIO Admin - гэта ўбудова KIO worker, якая дазваляе праграмам, якія працуюць з KIO (напрыклад, Dolphin, Kate або Gwenview), атрымліваць доступ да файлаў ад імя адміністратара/суперкарыстальніка.</p>
     <p xml:lang="ca">El KIO Admin és un connector de procés de treball KIO que habilita les aplicacions preparades per al KIO (com el Dolphin, Kate o Gwenview) accedeixin als fitxers com a administrador/root.</p>
     <p xml:lang="ca-valencia">KIO Admin és un connector de procés de treball KIO que habilita les aplicacions preparades per a KIO (com Dolphin, Kate o Gwenview) accedisquen als fitxers com a administrador/root.</p>
@@ -76,6 +79,7 @@
   </description>
   <project_group>KDE</project_group>
   <developer_name>Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
+  <developer_name xml:lang="ar">هارالد سِتِر &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="be">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ca">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ca-valencia">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
