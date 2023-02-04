@@ -13,6 +13,7 @@
   <name xml:lang="be">KIO Admin</name>
   <name xml:lang="ca">KIO Admin</name>
   <name xml:lang="ca-valencia">KIO Admin</name>
+  <name xml:lang="cs">KIO Admin</name>
   <name xml:lang="de">KIO-Admin</name>
   <name xml:lang="es">KIO Admin</name>
   <name xml:lang="eu">KIO Admin</name>
@@ -86,6 +87,7 @@
   <developer_name xml:lang="be">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ca">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ca-valencia">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
+  <developer_name xml:lang="cs">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="de">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="es">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="eu">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
