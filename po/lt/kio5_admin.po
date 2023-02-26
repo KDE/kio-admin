@@ -1,0 +1,25 @@
+# Lithuanian translations for kio-admin package.
+# Copyright (C) 2023 This file is copyright:
+# This file is distributed under the same license as the kio-admin package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kio-admin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-14 00:49+0000\n"
+"PO-Revision-Date: 2022-10-14 00:49+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: fileaction/fileaction.cpp:41
+#, kde-format
+msgctxt "@action"
+msgid "Open as Administrator"
+msgstr ""
