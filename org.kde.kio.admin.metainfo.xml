@@ -48,6 +48,7 @@
   <summary xml:lang="it">Consente l'accesso amministrativo per le applicazioni abilitate per KIO</summary>
   <summary xml:lang="ka">ადმინისტრირების წვდომა KIO-ჩართული აპლიკაციებისთვის</summary>
   <summary xml:lang="nl">Schakelt toegang als systeembeheerder in voor toepassingen met KIO ingeschakeld</summary>
+  <summary xml:lang="nn">Gjev administrativ tilgang for program med KIO-støtte</summary>
   <summary xml:lang="pl">Włącza dostęp administracyjny dla aplikacji obsługujących KIO</summary>
   <summary xml:lang="pt">Activa o acesso como administrador às aplicações com suporte para o KIO</summary>
   <summary xml:lang="pt-BR">Habilita acesso administrativo para aplicativos com suporte a KIO</summary>
@@ -73,6 +74,7 @@
     <p xml:lang="it">KIO Admin è un estensione del worker KIO che consente alle applicazioni compatibili con KIO (come Dolphin, Kate o Gwenview) di accedere ai file come amministratore/root.</p>
     <p xml:lang="ka">KIOAdmin-ი KIO დამხმარე პროცესის დამატებას წარმოადგენს, რომლებიც აპლიკაციებს, რომლებმაც იციან, KIO რა არის (მაგ: Dolphin, Kate და Gwenview) ფაილებთან ადმინისტრატორის/root წვდომა იქონიონ.</p>
     <p xml:lang="nl">KIO Admin is een KIO-worker die met KIO bekende toepassingen (zoals Dolphin, Kate of Gwenview) toegang geeft tot bestanden als systeembeheerder/root.</p>
+    <p xml:lang="nn">KIO Admin er ein KIO-arbeidar som lèt program som brukar KIO (for eksempel Dolphin, Kate og Gwenview) få lese- og skrivetilgang til filene som administrator/rotbrukar.</p>
     <p xml:lang="pl">KIO Admin jest wtyczką pracownika KIO, która daje aplikacjom z obsługą KIO (takim jak Dolphin, Kate czy Gwenview) dostęp do plików w trybie administratora.</p>
     <p xml:lang="pt">O KIO Admin é um módulo do KIO que permite às aplicações com suporte para o KI (como o Dolphin, o Kate ou o Gwenview) acederem aos ficheiros como administrador ('root').</p>
     <p xml:lang="pt-BR">KIO Admin é um plugin KIO worker que habilita aplicativos com suporte a KIO (como Dolphin, Kate ou Gwenview) acesso a arquivos como administrador/root.</p>
