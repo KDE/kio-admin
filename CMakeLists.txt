@@ -2,7 +2,14 @@
 # SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
 
 cmake_minimum_required(VERSION 3.22)
-project(kio-admin VERSION 1.0)
+
+# KDE Application Version, managed by release script
+set(RELEASE_SERVICE_VERSION_MAJOR "23")
+set(RELEASE_SERVICE_VERSION_MINOR "07")
+set(RELEASE_SERVICE_VERSION_MICRO "70")
+set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
+
+project(kio-admin VERSION ${RELEASE_SERVICE_VERSION})
 
 set(CMAKE_CXX_STANDARD 20)
 set(QT_MIN_VERSION "5.15.0")
