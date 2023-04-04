@@ -25,11 +25,9 @@ public:
 
     QList<QAction *> actions(const KFileItemListProperties &fileItemInfos, QWidget *parentWidget) override
     {
-        qDebug() << fileItemInfos.isLocal();
         if (!fileItemInfos.isLocal()) {
             return {};
         }
-        qDebug() << "actions!!!";
         const auto items = fileItemInfos.items();
         if (std::all_of(items.cbegin(), items.cend(), [](const KFileItem &item) {
                 auto url = item.mostLocalUrl();
@@ -47,7 +45,6 @@ public:
                 // Descend into the directory immediately if it is the only selected item...
                 url.setPath(url.path() + QLatin1String("/"));
             }
-            qDebug() << "urly!!!" << url;
             urls << url;
         }
         connect(action, &QAction::triggered, this, [urls, this] {
