@@ -13,9 +13,9 @@ project(kio-admin VERSION ${RELEASE_SERVICE_VERSION})
 
 set(CMAKE_CXX_STANDARD 20)
 set(QT_MIN_VERSION "5.15.0")
-set(KF5_MIN_VERSION "5.98.0")
+set(KF_MIN_VERSION "5.98.0")
 
-find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(FeatureSummary)
@@ -32,7 +32,7 @@ include(KDEClangFormat)
 include(KDEGitCommitHooks)
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS KIO I18n)
+find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS KIO I18n)
 find_package(PolkitQt${QT_MAJOR_VERSION}-1 REQUIRED)
 
 add_subdirectory(src)

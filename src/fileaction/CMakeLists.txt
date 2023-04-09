@@ -3,4 +3,4 @@
 
 kcoreaddons_add_plugin(fileaction SOURCES fileaction.cpp INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kfileitemaction")
 set_target_properties(fileaction PROPERTIES OUTPUT_NAME "kio-admin")
-target_link_libraries(fileaction KF5::I18n KF5::KIOWidgets)
+target_link_libraries(fileaction KF${QT_MAJOR_VERSION}::I18n KF${QT_MAJOR_VERSION}::KIOWidgets)
