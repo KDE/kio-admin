@@ -7,6 +7,8 @@
 
 #include "busobject.h"
 
+#include <KJob>
+
 class GetCommand : public BusObject
 {
     Q_OBJECT
@@ -16,6 +18,7 @@ public:
 
 public Q_SLOTS:
     void start();
+    void kill();
 
 Q_SIGNALS:
     void data(const QByteArray &blob);

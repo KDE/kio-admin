@@ -10,9 +10,14 @@
 #include <QDebug>
 #include <QMetaMethod>
 
+class KJob;
+
 class BusObject : public QObject, protected QDBusContext
 {
     Q_OBJECT
+public:
+    void setParent(QObject *parent) = delete;
+
 protected:
     BusObject(const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent = nullptr);
 
@@ -30,8 +35,12 @@ protected:
     }
 
     bool isAuthorized();
+    void setParent(KJob *parent);
+    void doKill();
 
 private:
     const QString m_remoteService;
     const QDBusObjectPath m_objectPath;
+
+    KJob *m_job = nullptr;
 };

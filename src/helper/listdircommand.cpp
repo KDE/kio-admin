@@ -30,3 +30,8 @@ void ListDirCommand::start()
         sendSignal(&ListDirCommand::result, job->error(), job->errorString());
     });
 }
+
+void ListDirCommand::kill()
+{
+    doKill();
+}
