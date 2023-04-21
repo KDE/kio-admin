@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
 
+#include <chrono>
 #include <optional>
 
 #include <QDBusConnection>
@@ -25,6 +26,12 @@
 #include "interface_statcommand.h"
 
 using namespace KIO;
+using namespace std::chrono_literals;
+
+namespace
+{
+constexpr auto killPollInterval = 200ms;
+} // namespace
 
 class AdminWorker : public QObject, public WorkerBase
 {
@@ -45,6 +52,46 @@ public:
     static QString serviceInterface()
     {
         return QStringLiteral("org.kde.kio.admin");
+    }
+
+    // Start the eventloop but check every couple milliseconds if the worker was
+    // aborted, if that is the case quit the loop.
+    void execLoop(QEventLoop &loop)
+    {
+        QTimer timer;
+        timer.setInterval(killPollInterval);
+        timer.setSingleShot(false);
+        connect(&timer, &QTimer::timeout, &timer, [this, &loop] {
+            if (wasKilled()) {
+                loop.quit();
+            }
+        });
+        timer.start();
+        loop.exec();
+    }
+
+    // Variant of execLoop which additionally will forward the kill order to
+    // the command object. This allows us to cancel long running operations
+    // such as get().
+    template<typename Iface>
+    void execLoopWithTerminatingIface(QEventLoop &loop, Iface &iface)
+    {
+        QTimer timer;
+        timer.setInterval(killPollInterval);
+        timer.setSingleShot(false);
+        connect(
+            &timer,
+            &QTimer::timeout,
+            &timer,
+            [this, &loop, &iface, &timer] {
+                if (wasKilled()) {
+                    iface.kill();
+                    loop.quit();
+                }
+            },
+            Qt::QueuedConnection);
+        timer.start();
+        loop.exec();
     }
 
     WorkerResult listDir(const QUrl &url) override
@@ -71,7 +118,7 @@ public:
 
         iface.start();
 
-        loop.exec();
+        execLoopWithTerminatingIface(loop, iface);
 
         QDBusConnection::systemBus().disconnect(serviceName(),
                                                 path,
@@ -130,7 +177,7 @@ public:
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::result, this, &AdminWorker::result);
         m_file->open();
 
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -138,7 +185,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->read(size);
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -148,7 +195,7 @@ public:
         Q_ASSERT(!m_pendingWrite.has_value());
         m_pendingWrite = data.size();
         m_file->write(data);
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -156,7 +203,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->seek(offset);
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -164,7 +211,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->truncate(size);
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -172,7 +219,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->close();
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -200,7 +247,7 @@ public:
         connect(&iface, &OrgKdeKioAdminPutCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoopWithTerminatingIface(loop, iface);
         return m_result;
     }
 
@@ -225,7 +272,7 @@ public:
         QDBusConnection::systemBus().call(
             QDBusMessage::createMethodCall(serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("start")));
 
-        loop.exec();
+        execLoop(loop);
 
         QDBusConnection::systemBus()
             .disconnect(serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("statEntry"), this, SLOT(entry(KIO::UDSEntry)));
@@ -250,7 +297,7 @@ public:
         connect(&iface, &OrgKdeKioAdminCopyCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -277,7 +324,7 @@ public:
         connect(&iface, &OrgKdeKioAdminGetCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoopWithTerminatingIface(loop, iface);
         return m_result;
     }
 
@@ -299,7 +346,7 @@ public:
         connect(&iface, &OrgKdeKioAdminDelCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -319,7 +366,7 @@ public:
         connect(&iface, &OrgKdeKioAdminMkdirCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -339,7 +386,7 @@ public:
         connect(&iface, &OrgKdeKioAdminRenameCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -361,7 +408,7 @@ public:
         connect(&iface, &OrgKdeKioAdminChmodCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 
@@ -381,7 +428,7 @@ public:
         connect(&iface, &OrgKdeKioAdminChownCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        loop.exec();
+        execLoop(loop);
         return m_result;
     }
 

@@ -18,6 +18,7 @@ public:
 
 public Q_SLOTS:
     void start();
+    void kill();
 
 Q_SIGNALS:
     void entries(const KIO::UDSEntryList &list);

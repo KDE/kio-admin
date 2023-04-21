@@ -3,6 +3,8 @@
 
 #include "busobject.h"
 
+#include <KJob>
+
 #include "auth.h"
 
 BusObject::BusObject(const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
@@ -15,4 +17,22 @@ BusObject::BusObject(const QString &remoteService, const QDBusObjectPath &object
 bool BusObject::isAuthorized()
 {
     return ::isAuthorized(this);
+}
+
+void BusObject::setParent(KJob *parent)
+{
+    QObject::setParent(parent);
+    m_job = parent;
+}
+
+void BusObject::doKill()
+{
+    if (!isAuthorized()) {
+        sendErrorReply(QDBusError::AccessDenied);
+        return;
+    }
+
+    if (m_job) {
+        m_job->kill();
+    }
 }

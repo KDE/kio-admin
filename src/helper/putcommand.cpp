@@ -44,3 +44,8 @@ void PutCommand::data(const QByteArray &data)
     m_newData = data;
     m_loop.quit();
 }
+
+void PutCommand::kill()
+{
+    doKill();
+}

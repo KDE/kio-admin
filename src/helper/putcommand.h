@@ -24,6 +24,7 @@ public:
 
 public Q_SLOTS:
     void start();
+    void kill();
     void data(const QByteArray &data);
 
 Q_SIGNALS:

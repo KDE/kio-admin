@@ -30,3 +30,8 @@ void GetCommand::start()
         sendSignal(&GetCommand::result, job->error(), job->errorString());
     });
 }
+
+void GetCommand::kill()
+{
+    doKill();
+}
