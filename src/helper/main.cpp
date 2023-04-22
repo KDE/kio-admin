@@ -42,7 +42,7 @@ public Q_SLOTS:
     QDBusObjectPath listDir(const QString &stringUrl)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -59,7 +59,7 @@ public Q_SLOTS:
     QDBusObjectPath stat(const QString &stringUrl)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -77,7 +77,7 @@ public Q_SLOTS:
     QDBusObjectPath get(const QString &stringUrl)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -94,7 +94,7 @@ public Q_SLOTS:
     QDBusObjectPath put(const QString &stringUrl, int permissions, int flags)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -111,7 +111,7 @@ public Q_SLOTS:
     QDBusObjectPath copy(const QString &stringUrlSrc, const QString &stringUrlDst, int permissions, int flags)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -128,7 +128,7 @@ public Q_SLOTS:
     QDBusObjectPath del(const QString &stringUrl)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -145,7 +145,7 @@ public Q_SLOTS:
     QDBusObjectPath mkdir(const QString &stringUrl, int permissions)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -162,7 +162,7 @@ public Q_SLOTS:
     QDBusObjectPath chmod(const QString &stringUrl, int permissions)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -179,7 +179,7 @@ public Q_SLOTS:
     QDBusObjectPath chown(const QString &stringUrl, const QString &user, const QString &group)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -196,7 +196,7 @@ public Q_SLOTS:
     QDBusObjectPath rename(const QString &stringUrlSrc, const QString &stringUrlDst, int flags)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 
@@ -213,7 +213,7 @@ public Q_SLOTS:
     QDBusObjectPath file(const QString &stringUrl, int openMode)
     {
         if (!isAuthorized()) {
-            sendErrorReply(QDBusError::InternalError);
+            sendErrorReply(QDBusError::AccessDenied);
             return {};
         }
 

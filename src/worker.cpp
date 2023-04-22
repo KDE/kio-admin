@@ -94,14 +94,25 @@ public:
         loop.exec();
     }
 
+    [[nodiscard]] WorkerResult toFailure(const QDBusMessage &msg)
+    {
+        qWarning() << msg.errorName() << msg.errorMessage();
+        switch (QDBusError(msg).type()) {
+        case QDBusError::AccessDenied:
+            return WorkerResult::fail(ERR_ACCESS_DENIED, msg.errorMessage());
+        default:
+            break;
+        }
+        return WorkerResult::fail();
+    }
+
     WorkerResult listDir(const QUrl &url) override
     {
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("listDir"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
         qDebug() << path;
@@ -136,8 +147,7 @@ public:
         request << url.toString() << (int)mode;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
@@ -229,8 +239,7 @@ public:
         request << url.toString() << permissions << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
@@ -257,8 +266,7 @@ public:
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
@@ -287,8 +295,7 @@ public:
         request << src.toString() << dest.toString() << permissions << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
         qDebug() << path;
@@ -308,8 +315,7 @@ public:
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
         qDebug() << path;
@@ -337,8 +343,7 @@ public:
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
@@ -357,8 +362,7 @@ public:
         request << url.toString() << permissions;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
@@ -377,8 +381,7 @@ public:
         request << src.toString() << dest.toString() << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
@@ -399,8 +402,7 @@ public:
         request << url.toString() << permissions;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
@@ -419,8 +421,7 @@ public:
         request << url.toString() << owner << group;
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << reply.errorName() << reply.errorMessage();
-            return WorkerResult::fail();
+            return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
