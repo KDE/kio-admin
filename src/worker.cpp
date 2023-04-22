@@ -83,7 +83,7 @@ public:
             &timer,
             &QTimer::timeout,
             &timer,
-            [this, &loop, &iface, &timer] {
+            [this, &loop, &iface] {
                 if (wasKilled()) {
                     iface.kill();
                     loop.quit();
