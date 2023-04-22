@@ -33,6 +33,6 @@ void BusObject::doKill()
     }
 
     if (m_job) {
-        m_job->kill();
+        m_job->kill(KJob::Quietly);
     }
 }

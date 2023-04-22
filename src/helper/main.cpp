@@ -74,7 +74,7 @@ public Q_SLOTS:
         return objPath;
     }
 
-    QDBusObjectPath get(const QString &stringUrl)
+    QDBusObjectPath get(const QString &stringUrl, const QDBusUnixFileDescriptor &fd)
     {
         if (!isAuthorized()) {
             sendErrorReply(QDBusError::InternalError);
@@ -86,12 +86,12 @@ public Q_SLOTS:
         Q_ASSERT(counter != 0);
 
         const QDBusObjectPath objPath(QStringLiteral("/org/kde/kio/admin/get/%1").arg(QString::number(counter)));
-        auto command = new GetCommand(stringToUrl(stringUrl), message().service(), objPath);
+        auto command = new GetCommand(stringToUrl(stringUrl), fd, message().service(), objPath);
         connection().registerObject(objPath.path(), command, QDBusConnection::ExportAllSlots);
         return objPath;
     }
 
-    QDBusObjectPath put(const QString &stringUrl, int permissions, int flags)
+    QDBusObjectPath put(const QString &stringUrl, const QDBusUnixFileDescriptor &fd, int permissions, int flags)
     {
         if (!isAuthorized()) {
             sendErrorReply(QDBusError::InternalError);
@@ -103,7 +103,7 @@ public Q_SLOTS:
         Q_ASSERT(counter != 0);
 
         const QDBusObjectPath objPath(QStringLiteral("/org/kde/kio/admin/put/%1").arg(QString::number(counter)));
-        auto command = new PutCommand(stringToUrl(stringUrl), permissions, KIO::JobFlags(flags), message().service(), objPath);
+        auto command = new PutCommand(stringToUrl(stringUrl), fd, permissions, KIO::JobFlags(flags), message().service(), objPath);
         connection().registerObject(objPath.path(), command, QDBusConnection::ExportAllSlots);
         return objPath;
     }

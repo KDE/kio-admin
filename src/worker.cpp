@@ -2,6 +2,7 @@
 // SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
 
 #include <chrono>
+#include <climits>
 #include <optional>
 
 #include <QDBusConnection>
@@ -24,6 +25,7 @@
 #include "interface_putcommand.h"
 #include "interface_renamecommand.h"
 #include "interface_statcommand.h"
+#include "posix.h"
 
 using namespace KIO;
 using namespace std::chrono_literals;
@@ -225,8 +227,18 @@ public:
 
     WorkerResult put(const QUrl &url, int permissions, JobFlags flags) override
     {
+        auto pipeFds = std::to_array<int>({0, 0});
+        if (pipe2(pipeFds.data(), O_CLOEXEC | O_NONBLOCK) != 0) {
+            return WorkerResult::fail(KIO::ERR_INTERNAL, QStringLiteral("Failed to create pipes"));
+        }
+        auto closeFds = qScopeGuard([pipeFds] {
+            for (const auto &fd : pipeFds) {
+                ::close(fd);
+            }
+        });
+
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("put"));
-        request << url.toString() << permissions << static_cast<int>(flags);
+        request << url.toString() << QVariant::fromValue(QDBusUnixFileDescriptor(pipeFds.at(0))) << permissions << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
             qWarning() << reply.errorName() << reply.errorMessage();
@@ -234,15 +246,50 @@ public:
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
 
-        OrgKdeKioAdminPutCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
+        QFile file;
+        if (!file.open(pipeFds.at(1), QIODevice::ReadOnly)) {
+            return WorkerResult::fail(KIO::ERR_INTERNAL, QStringLiteral("Failed to open write pipe"));
+        }
 
-        connect(&iface, &OrgKdeKioAdminPutCommandInterface::dataRequest, this, [this, &iface]() {
+        OrgKdeKioAdminPutCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
+        connect(&iface, &OrgKdeKioAdminPutCommandInterface::dataRequest, this, [this, &iface, &file]() {
             dataReq();
-            QByteArray buffer;
-            if (const int read = readData(buffer); read < 0) {
+            QByteArray blob;
+            if (const int read = readData(blob); read < 0) {
                 qWarning() << "Failed to read data for unknown reason" << read;
+                m_result = WorkerResult::fail(read);
+                m_loop.quit();
+                return;
             }
-            iface.data(buffer);
+
+            if (blob.isEmpty()) { // end of data
+                file.flush();
+                iface.readData();
+                return;
+            }
+
+            // pipes are a bit tricky, if the client reads too slowly we need to repeat our write until the data fits
+            // into the pipe buffer
+            off_t offset = 0;
+            while (offset < blob.size()) {
+                const auto block = blob.mid(offset, PIPE_BUF);
+                const auto written = ::write(file.handle(), block.constData(), block.size());
+                if (written == -1) {
+                    const auto err = errno;
+                    if (err == EAGAIN) {
+                        file.flush();
+                        iface.readData(); // Please read already :((
+                        continue;
+                    }
+                    qWarning() << Q_FUNC_INFO << qstrerror(err);
+                    m_result = WorkerResult::fail(ERR_CANNOT_WRITE, QStringLiteral("put-input-pipe"));
+                    m_loop.quit();
+                    return;
+                }
+                offset += written;
+                file.flush();
+                iface.readData();
+            }
         });
         connect(&iface, &OrgKdeKioAdminPutCommandInterface::result, this, &AdminWorker::result);
         iface.start();
@@ -303,20 +350,42 @@ public:
 
     WorkerResult get(const QUrl &url) override
     {
-        qDebug() << Q_FUNC_INFO;
+        auto pipeFds = std::to_array<int>({0, 0});
+        if (pipe2(pipeFds.data(), O_CLOEXEC | O_NONBLOCK) != 0) {
+            return WorkerResult::fail(KIO::ERR_INTERNAL, QStringLiteral("Failed to create pipes"));
+        }
+        auto closeFds = qScopeGuard([pipeFds] {
+            for (const auto &fd : pipeFds) {
+                ::close(fd);
+            }
+        });
+
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("get"));
-        request << url.toString();
+        request << url.toString() << QVariant::fromValue(QDBusUnixFileDescriptor(pipeFds.at(1)));
         auto reply = QDBusConnection::systemBus().call(request);
         if (reply.type() == QDBusMessage::ErrorMessage) {
             qWarning() << reply.errorName() << reply.errorMessage();
             return WorkerResult::fail();
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
-        qDebug() << path;
+
+        QFile file;
+        if (!file.open(pipeFds.at(0), QIODevice::ReadOnly)) {
+            return WorkerResult::fail(KIO::ERR_INTERNAL, QStringLiteral("Failed to open read pipe"));
+        }
 
         OrgKdeKioAdminGetCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
-        connect(&iface, &OrgKdeKioAdminGetCommandInterface::data, this, [this](const QByteArray &blob) {
-            data(blob);
+        connect(&iface, &OrgKdeKioAdminGetCommandInterface::readData, this, [this, &file] {
+            const auto blob = file.readAll();
+            // If we send too large blobs KIO will eventually explode - supposedly because the wire format isn't able
+            // to handle huge blobs of data. This code should either be moved into KIO or the wire format needs changing.
+            auto offset = 0;
+            while (offset < blob.size()) {
+                static constexpr auto dataMaxSize = 1 * 1024 * 1024; // MiB
+                const auto blockSize = std::min(dataMaxSize, blob.size() - offset);
+                data(blob.mid(offset, blockSize));
+                offset += blockSize;
+            }
         });
         connect(&iface, &OrgKdeKioAdminGetCommandInterface::mimeTypeFound, this, [this](const QString &mimetype) {
             mimeType(mimetype);

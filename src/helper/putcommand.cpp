@@ -3,9 +3,18 @@
 
 #include "putcommand.h"
 
-PutCommand::PutCommand(const QUrl &url, int permissions, KIO::JobFlags flags, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
+#include <QThread>
+
+PutCommand::PutCommand(const QUrl &url,
+                       const QDBusUnixFileDescriptor &fd,
+                       int permissions,
+                       KIO::JobFlags flags,
+                       const QString &remoteService,
+                       const QDBusObjectPath &objectPath,
+                       QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)
+    , m_fd(fd)
     , m_permissions(permissions)
     , m_flags(flags)
 {
@@ -13,35 +22,52 @@ PutCommand::PutCommand(const QUrl &url, int permissions, KIO::JobFlags flags, co
 
 void PutCommand::start()
 {
-    qDebug() << Q_FUNC_INFO;
     if (!isAuthorized()) {
         sendErrorReply(QDBusError::AccessDenied);
+        return;
+    }
+
+    if (!m_file.open(m_fd.fileDescriptor(), QIODevice::ReadOnly, QFileDevice::DontCloseHandle)) { // don't close the fd. we don't own it.
+        sendErrorReply(QDBusError::Failed, m_file.errorString());
         return;
     }
 
     auto job = KIO::put(m_url, m_permissions, m_flags);
     setParent(job);
     connect(job, &KIO::TransferJob::dataReq, this, [this](KIO::Job *, QByteArray &data) {
-        qDebug() << Q_FUNC_INFO << "data request";
         sendSignal(&PutCommand::dataRequest);
         m_loop.exec();
-        data = m_newData;
+
+        if (m_atEnd) {
+            data.clear();
+            return;
+        }
+
+        data = m_file.read(PIPE_BUF);
     });
     connect(job, &KIO::TransferJob::result, this, [this, job](KJob *) {
-        qDebug() << Q_FUNC_INFO << "result" << job->errorString();
         sendSignal(&PutCommand::result, job->error(), job->errorString());
     });
 }
 
-void PutCommand::data(const QByteArray &data)
+void PutCommand::readData()
 {
-    qDebug() << Q_FUNC_INFO;
     if (!isAuthorized()) {
         sendErrorReply(QDBusError::AccessDenied);
         return;
     }
 
-    m_newData = data;
+    m_loop.quit();
+}
+
+void PutCommand::atEnd()
+{
+    if (!isAuthorized()) {
+        sendErrorReply(QDBusError::AccessDenied);
+        return;
+    }
+
+    m_atEnd = true;
     m_loop.quit();
 }
 
