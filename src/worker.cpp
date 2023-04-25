@@ -118,7 +118,7 @@ public:
 
         iface.start();
 
-        execLoopWithTerminatingIface(loop, iface);
+        execLoopWithTerminatingIface(m_loop, iface);
 
         QDBusConnection::systemBus().disconnect(serviceName(),
                                                 path,
@@ -150,34 +150,34 @@ public:
             Q_ASSERT(m_pendingWrite.has_value());
             m_pendingWrite.emplace(m_pendingWrite.value() - length);
             if (m_pendingWrite.value() == 0) {
-                loop.quit();
+                m_loop.quit();
             }
             result(0, {});
         });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::data, this, [this](const QByteArray &blob) {
             data(blob);
-            loop.quit();
+            m_loop.quit();
             result(0, {});
         });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::positionChanged, this, [this](qulonglong offset) {
             position(offset);
-            loop.quit();
+            m_loop.quit();
             result(0, {});
         });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::truncated, this, [this](qulonglong length) {
             truncated(length);
-            loop.quit();
+            m_loop.quit();
             result(0, {});
         });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::mimeTypeFound, this, [this](const QString &mimetype) {
             mimeType(mimetype);
-            loop.quit();
+            m_loop.quit();
             result(0, {});
         });
         connect(m_file.get(), &OrgKdeKioAdminFileInterface::result, this, &AdminWorker::result);
         m_file->open();
 
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -185,7 +185,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->read(size);
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -195,7 +195,7 @@ public:
         Q_ASSERT(!m_pendingWrite.has_value());
         m_pendingWrite = data.size();
         m_file->write(data);
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -203,7 +203,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->seek(offset);
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -211,7 +211,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->truncate(size);
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -219,7 +219,7 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         m_file->close();
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -247,7 +247,7 @@ public:
         connect(&iface, &OrgKdeKioAdminPutCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoopWithTerminatingIface(loop, iface);
+        execLoopWithTerminatingIface(m_loop, iface);
         return m_result;
     }
 
@@ -272,7 +272,7 @@ public:
         QDBusConnection::systemBus().call(
             QDBusMessage::createMethodCall(serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("start")));
 
-        execLoop(loop);
+        execLoop(m_loop);
 
         QDBusConnection::systemBus()
             .disconnect(serviceName(), path, QStringLiteral("org.kde.kio.admin.StatCommand"), QStringLiteral("statEntry"), this, SLOT(entry(KIO::UDSEntry)));
@@ -297,7 +297,7 @@ public:
         connect(&iface, &OrgKdeKioAdminCopyCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -324,7 +324,7 @@ public:
         connect(&iface, &OrgKdeKioAdminGetCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoopWithTerminatingIface(loop, iface);
+        execLoopWithTerminatingIface(m_loop, iface);
         return m_result;
     }
 
@@ -346,7 +346,7 @@ public:
         connect(&iface, &OrgKdeKioAdminDelCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -366,7 +366,7 @@ public:
         connect(&iface, &OrgKdeKioAdminMkdirCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -386,7 +386,7 @@ public:
         connect(&iface, &OrgKdeKioAdminRenameCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -408,7 +408,7 @@ public:
         connect(&iface, &OrgKdeKioAdminChmodCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -428,7 +428,7 @@ public:
         connect(&iface, &OrgKdeKioAdminChownCommandInterface::result, this, &AdminWorker::result);
         iface.start();
 
-        execLoop(loop);
+        execLoop(m_loop);
         return m_result;
     }
 
@@ -459,13 +459,13 @@ private Q_SLOTS:
         } else {
             m_result = WorkerResult::pass();
         }
-        loop.quit();
+        m_loop.quit();
     }
 
 private:
     WorkerResult m_result = WorkerResult::pass();
     std::unique_ptr<OrgKdeKioAdminFileInterface> m_file;
-    QEventLoop loop;
+    QEventLoop m_loop;
     std::optional<quint64> m_pendingWrite = std::nullopt;
 };
 
