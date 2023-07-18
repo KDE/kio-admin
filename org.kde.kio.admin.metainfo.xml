@@ -16,7 +16,6 @@
   <name xml:lang="cs">KIO Admin</name>
   <name xml:lang="de">KIO-Admin</name>
   <name xml:lang="en-GB">KIO Admin</name>
-  <name xml:lang="eo">KIO-Admin</name>
   <name xml:lang="es">KIO Admin</name>
   <name xml:lang="eu">KIO Admin</name>
   <name xml:lang="fi">KIO Admin</name>
@@ -46,7 +45,6 @@
   <summary xml:lang="ca-valencia">Habilita l'accés d'administració per a les aplicacions que permeten KIO</summary>
   <summary xml:lang="de">Systemverwalterrechte für KIO-fähige Anwendungen aktivieren</summary>
   <summary xml:lang="en-GB">Enables administrative access for KIO-enabled applications</summary>
-  <summary xml:lang="eo">Ebligas administran aliron por KIO-povaj aplikaĵoj</summary>
   <summary xml:lang="es">Activa el acceso de administrador en las aplicaciones que usan KIO</summary>
   <summary xml:lang="eu">KIO gaituta duten aplikazioetan sarbide administratiboa gaitzen du</summary>
   <summary xml:lang="fi">Sallii ylläpitäjäkäytön KIO-tietoisissa sovelluksissa</summary>
@@ -107,7 +105,6 @@
   <developer_name xml:lang="cs">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="de">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="en-GB">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
-  <developer_name xml:lang="eo">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="es">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="eu">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="fi">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
