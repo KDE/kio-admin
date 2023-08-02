@@ -93,7 +93,7 @@
     <p xml:lang="pt-BR">KIO Admin é um plugin KIO worker que habilita aplicativos com suporte a KIO (como Dolphin, Kate ou Gwenview) acesso a arquivos como administrador/root.</p>
     <p xml:lang="ru">Администратор KIO — модуль KIO, обеспечивающий доступ к файлам с правами администратора / суперпользователя из приложений, основанных на модуле KIO (диспетчер файлов Dolphin, текстовый редактор Kate, приложение для просмотра изображений Gwenview и прочих).</p>
     <p xml:lang="sl">KIO Admin je vtičnik za program KIO worker, ki omogoča aplikacijam, ki poznajo KIO (kot so Dolphin, Kate ali Gweview) dostop do datotek kot skrbnik/root.</p>
-    <p xml:lang="tr">KIO Yöneticisi, KIO ile tümleşmiş uygulamaların (Dolphin, Kate, Gwenview gibi), dosyalara yönetici/kök olarak erişmesine izin veren bir KIO çalışan eklentisidir.</p>
+    <p xml:lang="tr">KIO Yöneticisi, KIO ile tümleşmiş uygulamaların (Dolphin, Kate, Akbakış gibi), dosyalara yönetici/kök olarak erişmesine izin veren bir KIO çalışan eklentisidir.</p>
     <p xml:lang="uk">KIO адміністрування є додатком-обробником KIO, який уможливлює для програм із KIO (зокрема Dolphin, Kate і Gwenview) доступ до файлів від імені адміністратора/root.</p>
     <p xml:lang="x-test">xxKIO Admin is a KIO worker plugin that enables KIO-aware applications (such as Dolphin, Kate or Gwenview) to access files as administrator/root.xx</p>
     <p xml:lang="zh-CN">KIO 管理员是一款用于为基于 KIO 的应用程序 (例如 Dolphin、Kate、Gwenview 等) 提供管理员/根权限访问的 KIO 工作程序。</p>
