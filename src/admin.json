@@ -21,12 +21,12 @@
             ],
             "makedir": true,
             "maxInstances": 5,
-            "opening": true,
             "moving": true,
-            "truncating": false,
+            "opening": true,
             "output": "filesystem",
             "protocol": "admin",
             "reading": true,
+            "truncating": false,
             "writing": true
         }
     }
