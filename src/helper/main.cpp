@@ -245,7 +245,11 @@ int main(int argc, char *argv[])
     qRegisterMetaType<KIO::UDSEntry>("KIO::UDSEntry");
     qDBusRegisterMetaType<KIO::UDSEntry>();
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     KIO::setDefaultJobUiDelegateFactoryV2(nullptr);
+#else
+    KIO::setDefaultJobUiDelegateFactory(nullptr);
+#endif
     KIO::setDefaultJobUiDelegateExtension(nullptr);
 
     Helper helper;
