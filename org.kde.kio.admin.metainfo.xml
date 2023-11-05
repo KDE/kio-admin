@@ -37,7 +37,6 @@
   <name xml:lang="sv">I/O-administration</name>
   <name xml:lang="tr">KIO Yöneticisi</name>
   <name xml:lang="uk">KIO адміністрування</name>
-  <name xml:lang="x-test">xxKIO Adminxx</name>
   <name xml:lang="zh-CN">KIO 管理员</name>
   <name xml:lang="zh-TW">KIO Admin</name>
   <summary>Enables administrative access for KIO-enabled applications</summary>
@@ -67,7 +66,6 @@
   <summary xml:lang="sv">Möjliggör administratörsåtkomst för I/O-medvetna program</summary>
   <summary xml:lang="tr">KIO etkinleştirilmiş uygulamalar için yönetimsel erişimi etkinleştirir</summary>
   <summary xml:lang="uk">Уможливлює адміністративний доступ до програм із уможливленим KIO</summary>
-  <summary xml:lang="x-test">xxEnables administrative access for KIO-enabled applicationsxx</summary>
   <summary xml:lang="zh-CN">为使用 KIO 的应用程序启用管理员权限访问</summary>
   <summary xml:lang="zh-TW">為支援 KIO 的應用程式提供管理員存取權</summary>
   <description>
@@ -98,7 +96,6 @@
     <p xml:lang="sv">I/O-administration är ett I/O-arbetarinsticksprogram som möjliggör för I/O-medvetna program (som Dolphin, Kate eller Gwenview) att komma åt filer som systemadministratör.</p>
     <p xml:lang="tr">KIO Yöneticisi, KIO ile tümleşmiş uygulamaların (Dolphin, Kate, Akbakış gibi), dosyalara yönetici/kök olarak erişmesine izin veren bir KIO çalışan eklentisidir.</p>
     <p xml:lang="uk">KIO адміністрування є додатком-обробником KIO, який уможливлює для програм із KIO (зокрема Dolphin, Kate і Gwenview) доступ до файлів від імені адміністратора/root.</p>
-    <p xml:lang="x-test">xxKIO Admin is a KIO worker plugin that enables KIO-aware applications (such as Dolphin, Kate or Gwenview) to access files as administrator/root.xx</p>
     <p xml:lang="zh-CN">KIO 管理员是一款用于为基于 KIO 的应用程序 (例如 Dolphin、Kate、Gwenview 等) 提供管理员/根权限访问的 KIO 工作程序。</p>
     <p xml:lang="zh-TW">KIO Admin 是讓支援 KIO 的應用程式（例如 Dolphin、Kate 或 Gwenview）以管理員 / root 模式存取檔案的 KIO worker 外掛程式。</p>
   </description>
@@ -132,7 +129,6 @@
   <developer_name xml:lang="sv">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="tr">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="uk">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
-  <developer_name xml:lang="x-test">xxHarald Sitter &lt;sitter@kde.org&gt;xx</developer_name>
   <developer_name xml:lang="zh-CN">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="zh-TW">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <categories>
