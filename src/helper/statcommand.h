@@ -5,7 +5,7 @@
 
 #include <QUrl>
 
-#include <KIO/Job>
+#include <KIO/UDSEntry>
 
 #include "busobject.h"
 

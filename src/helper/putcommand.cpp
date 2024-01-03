@@ -3,6 +3,8 @@
 
 #include "putcommand.h"
 
+#include <KIO/TransferJob>
+
 PutCommand::PutCommand(const QUrl &url, int permissions, KIO::JobFlags flags, const QString &remoteService, const QDBusObjectPath &objectPath, QObject *parent)
     : BusObject(remoteService, objectPath, parent)
     , m_url(url)

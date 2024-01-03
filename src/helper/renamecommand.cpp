@@ -3,6 +3,8 @@
 
 #include "renamecommand.h"
 
+#include <KIO/SimpleJob>
+
 RenameCommand::RenameCommand(const QUrl &src,
                              const QUrl &dst,
                              KIO::JobFlags flags,
