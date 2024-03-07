@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
 
+#include <atomic>
 #include <chrono>
 #include <optional>
 
@@ -31,7 +32,95 @@ using namespace std::chrono_literals;
 namespace
 {
 constexpr auto killPollInterval = 200ms;
+
+/**
+ * After a user made a choice we want to act accordingly. However, the user might change their
+ * opinion after a while. So we need to ask them again even though they have already made a
+ * decision in the past.
+ */
+constexpr std::chrono::duration durationForWhichWeHonorAUsersChoice{5s};
 } // namespace
+
+/**
+ * @brief A representation of an authorization request (e.g. a password prompt) used for book-keeping.
+ *
+ * This class is only used for read requests (e.g. receiving information for a file or reading the
+ * contents of a directory) for now because read authorization requests are created in rapid
+ * succession and spam the end user with password prompts. On the contrary, write authorization
+ * requests are generally explicitly triggered by users and therefore rare enough that we do not
+ * need to shield users from them.
+ */
+class ReadAuthorizationRequest
+{
+public:
+    enum class Result { Allowed, Denied };
+
+    void setResult(const QDBusMessage &reply)
+    {
+        Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage || reply.type() == QDBusMessage::ErrorMessage);
+        setResult(reply.type() == QDBusMessage::ReplyMessage ? Result::Allowed : Result::Denied);
+    }
+    void setResult(Result result)
+    {
+        Q_ASSERT(!m_result.has_value());
+        m_completionTime = std::chrono::system_clock::now();
+        m_result = result;
+    };
+
+    /** @returns whether the request was successful, denied, or didn't get a response yet. */
+    [[nodiscard]] std::optional<Result> result() const
+    {
+        return m_result;
+    };
+
+    /**
+     * Two ReadAuthorizationRequest are considered similar if the end user is likely to want the
+     * same outcome for both requests. This is the case when authorization for similar actions is
+     * requested within a short time frame.
+     * This method is commutative (meaning (a.isSimilar(b) == b.isSimilar(a)) is always true).
+     *
+     * @note Currently this method doesn't care if the read requests are for similar items or not.
+     */
+    [[nodiscard]] bool isSimilarTo(ReadAuthorizationRequest other) const
+    {
+        // We do not care about the details if we can compare the results of the requests.
+        if (m_result.has_value() && other.m_result.has_value()) {
+            return m_result.value() == other.m_result.value();
+        }
+        if (m_completionTime && other.m_creationTime < m_completionTime.value() + std::chrono::duration<int>(durationForWhichWeHonorAUsersChoice)) {
+            return true;
+        }
+        if (other.m_completionTime && m_creationTime < other.m_completionTime.value() + std::chrono::duration<int>(durationForWhichWeHonorAUsersChoice)) {
+            return true;
+        }
+        if (std::chrono::duration_cast<std::chrono::seconds>(other.m_creationTime - m_creationTime) < durationForWhichWeHonorAUsersChoice) {
+            return true;
+        }
+        return false;
+    };
+
+    /**
+     * A ReadAuthorizationRequest is considered still relevant if the opinion of the end user on this request is unlikely to have changed since it completed.
+     * We always consider it relevant if it has not even completed yet.
+     */
+    [[nodiscard]] bool isStillRelevant() const
+    {
+        if (!m_completionTime) {
+            // This wasn't even completed yet, so it must still be relevant.
+            return true;
+        }
+        return std::chrono::system_clock::now() - m_completionTime.value() < durationForWhichWeHonorAUsersChoice;
+    };
+
+private:
+    /** The time of construction of this object. */
+    std::chrono::system_clock::time_point m_creationTime = std::chrono::system_clock::now();
+    /** The point in time in which this request received its only and final result. */
+    std::optional<std::chrono::system_clock::time_point> m_completionTime;
+
+    /** Whether this request was successful, denied, or didn't get a response yet. */
+    std::optional<Result> m_result;
+};
 
 class AdminWorker : public QObject, public WorkerBase
 {
@@ -106,14 +195,97 @@ public:
         return WorkerResult::fail();
     }
 
+    /** @returns true if \a request is considered more important than what was remembered previously. false otherwise. */
+    bool considerRemembering(ReadAuthorizationRequest request)
+    {
+        auto previousRequest = s_previousReadAuthorisationRequest.load();
+        while (previousRequest && !previousRequest->isStillRelevant()) {
+            // The previousRequest is somewhat useless. We forget about it.
+            if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, std::nullopt)) {
+                // s_previousReadAuthorisationRequest was successfully set to std::nullopt
+                break;
+            }
+        }
+
+        if (!request.isStillRelevant()) {
+            return false;
+        }
+
+        // If s_previousReadAuthorisationRequest is empty, assign the current request to it.
+        std::optional<ReadAuthorizationRequest> nulloptRequest = std::nullopt;
+        if (s_previousReadAuthorisationRequest.compare_exchange_strong(nulloptRequest, request)) {
+            return true;
+        }
+
+        if ((!previousRequest || !previousRequest->result()) && request.result()) {
+            // The previousRequest doesn't have a result yet which makes it less useful than a request with a result that isStillRelevant().
+            if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, request)) {
+                return true;
+            }
+            // s_previousReadAuthorisationRequest changed from another thread since we loaded() its value at the start of this method.
+            // We could now either try again or give up. It's easier to give up and there isn't much harm in that so let's do that.
+            return false;
+        }
+
+        if (!previousRequest || !previousRequest->isSimilarTo(request)) {
+            // The previous and the current request are different. Currently only remembering of a singular request is implemented, so now we do not care about
+            // the older request anymore and replace it with the current request.
+            if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, request)) {
+                return true;
+            }
+            // s_previousReadAuthorisationRequest changed from another thread since we loaded() its value at the start of this method.
+            // We could now either try again or give up. It's easier to give up and there isn't much harm in that so let's do that.
+            return false;
+        }
+
+        // The request we are considering to remember is about as useful to us as the value s_previousReadAuthorisationRequest currently holds.
+        // The older request is supposed to be completed first though, which makes it generally more interesting to us.
+        return false;
+    }
+
+    /**
+     * @returns std::nullopt if there hasn't been a previous similar request somewhat recently.
+     *          If there has been a similar request, the result of that request is returned.
+     *          If the previous similar request is itself still awaiting its result, this method will make this thread sleep until we have a result.
+     */
+    [[nodiscard]] std::optional<ReadAuthorizationRequest::Result> resultOfPreviousRequestSimilarTo(ReadAuthorizationRequest request)
+    {
+        Q_ASSERT(!request.result()); // There is no point wondering about previous results when there is already a result for this request.
+
+        const bool firstReadRequestInAWhile = considerRemembering(request);
+
+        if (!firstReadRequestInAWhile) {
+            auto previousRequest = s_previousReadAuthorisationRequest.load();
+            while (previousRequest && previousRequest->isSimilarTo(request) && !previousRequest->result()) {
+                std::this_thread::sleep_for(durationForWhichWeHonorAUsersChoice / 2);
+                previousRequest = s_previousReadAuthorisationRequest.load();
+            }
+            if (previousRequest && previousRequest->isSimilarTo(request)) {
+                return previousRequest->result();
+            }
+        }
+        return std::nullopt;
+    }
+
     WorkerResult listDir(const QUrl &url) override
     {
+        ReadAuthorizationRequest thisRequest;
+        const auto resultOfPreviousSimilarRequest = resultOfPreviousRequestSimilarTo(thisRequest);
+        if (resultOfPreviousSimilarRequest && resultOfPreviousSimilarRequest == ReadAuthorizationRequest::Result::Denied) {
+            return WorkerResult::fail();
+        }
+
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("listDir"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
+        thisRequest.setResult(reply);
+
+        considerRemembering(thisRequest);
+
         if (reply.type() == QDBusMessage::ErrorMessage) {
             return toFailure(reply);
         }
+
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
         qDebug() << path;
 
@@ -262,9 +434,19 @@ public:
 
     WorkerResult stat(const QUrl &url) override
     {
+        ReadAuthorizationRequest thisRequest;
+        const auto resultOfPreviousSimilarRequest = resultOfPreviousRequestSimilarTo(thisRequest);
+        if (resultOfPreviousSimilarRequest && resultOfPreviousSimilarRequest == ReadAuthorizationRequest::Result::Denied) {
+            return WorkerResult::fail();
+        }
+
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("stat"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
+        thisRequest.setResult(reply);
+
+        considerRemembering(thisRequest);
+
         if (reply.type() == QDBusMessage::ErrorMessage) {
             return toFailure(reply);
         }
@@ -468,6 +650,8 @@ private:
     std::unique_ptr<OrgKdeKioAdminFileInterface> m_file;
     QEventLoop loop;
     std::optional<quint64> m_pendingWrite = std::nullopt;
+
+    inline static std::atomic<std::optional<ReadAuthorizationRequest>> s_previousReadAuthorisationRequest{};
 };
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

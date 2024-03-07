@@ -29,6 +29,8 @@ generate_and_use_interfaces(
     statcommand)
 
 kcoreaddons_add_plugin(admin SOURCES worker.cpp dbustypes.cpp ${admin_SRCS} INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kio")
-target_link_libraries(admin KF${QT_MAJOR_VERSION}::KIOCore)
+target_link_libraries(admin
+    PUBLIC KF${QT_MAJOR_VERSION}::KIOCore
+    PRIVATE atomic)
 set_target_properties(admin PROPERTIES OUTPUT_NAME "admin")
 set_target_properties(admin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/kf${QT_MAJOR_VERSION}/kio")
