@@ -112,6 +112,7 @@
     <p xml:lang="zh-TW">KIO Admin 是讓支援 KIO 的應用程式（例如 Dolphin、Kate 或 Gwenview）以管理員 / root 模式存取檔案的 KIO worker 外掛程式。</p>
   </description>
   <project_group>KDE</project_group>
+  <url type="homepage">https://kde.org</url>
   <developer_name>Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ar">هارالد سِتِر &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="be">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
