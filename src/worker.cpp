@@ -9,6 +9,8 @@
 #include <QDBusMessage>
 #include <QDBusPendingReply>
 #include <QDebug>
+#include <polkitqt1-agent-session.h>
+#include <polkitqt1-authority.h>
 
 #include <KIO/WorkerBase>
 #include <KIO/WorkerFactory>
@@ -620,6 +622,30 @@ public:
     //     qDebug() << Q_FUNC_INFO;
     //     return WorkerResult::pass();
     // }
+
+    WorkerResult special(const QByteArray &data) override
+    {
+        int tmp;
+        QDataStream stream(data);
+
+        stream >> tmp;
+        switch (tmp) {
+        case 1: { // Wait until the authorization has expired and only return then.
+            auto authority = PolkitQt1::Authority::instance();
+            PolkitQt1::UnixProcessSubject process(QCoreApplication::applicationPid());
+            PolkitQt1::Authority::Result result =
+                authority->checkAuthorizationSync(QStringLiteral("org.kde.kio.admin.commands"), process, PolkitQt1::Authority::AllowUserInteraction);
+            while (result == PolkitQt1::Authority::Yes && !wasKilled()) {
+                std::this_thread::sleep_for(5s);
+                result = authority->checkAuthorizationSync(QStringLiteral("org.kde.kio.admin.commands"), process, PolkitQt1::Authority::None);
+            }
+            return WorkerResult::pass();
+        }
+        default:
+            break;
+        }
+        return WorkerResult::pass();
+    }
 
 private Q_SLOTS:
     void entry(const KIO::UDSEntry &entry)
