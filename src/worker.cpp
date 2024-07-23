@@ -8,7 +8,6 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QDBusPendingReply>
-#include <QDebug>
 #include <polkitqt1-agent-session.h>
 #include <polkitqt1-authority.h>
 
@@ -27,6 +26,7 @@
 #include "interface_putcommand.h"
 #include "interface_renamecommand.h"
 #include "interface_statcommand.h"
+#include "kioadmin_debug.h"
 
 using namespace KIO;
 using namespace std::chrono_literals;
@@ -289,7 +289,7 @@ public:
         }
 
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
-        qDebug() << path;
+        qCDebug(KIOADMIN_LOG) << path;
 
         OrgKdeKioAdminListDirCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
         connect(&iface, &OrgKdeKioAdminListDirCommandInterface::result, this, &AdminWorker::result);
@@ -316,7 +316,7 @@ public:
 
     WorkerResult open(const QUrl &url, QIODevice::OpenMode mode) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("file"));
         request << url.toString() << (int)mode;
         auto reply = QDBusConnection::systemBus().call(request);
@@ -367,7 +367,7 @@ public:
 
     WorkerResult read(KIO::filesize_t size) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         m_file->read(size);
         execLoop(loop);
         return m_result;
@@ -375,7 +375,7 @@ public:
 
     WorkerResult write(const QByteArray &data) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         Q_ASSERT(!m_pendingWrite.has_value());
         m_pendingWrite = data.size();
         m_file->write(data);
@@ -385,7 +385,7 @@ public:
 
     WorkerResult seek(KIO::filesize_t offset) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         m_file->seek(offset);
         execLoop(loop);
         return m_result;
@@ -393,7 +393,7 @@ public:
 
     WorkerResult truncate(KIO::filesize_t size) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         m_file->truncate(size);
         execLoop(loop);
         return m_result;
@@ -401,7 +401,7 @@ public:
 
     WorkerResult close() override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         m_file->close();
         execLoop(loop);
         return m_result;
@@ -474,7 +474,7 @@ public:
 
     WorkerResult copy(const QUrl &src, const QUrl &dest, int permissions, JobFlags flags) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("copy"));
         request << src.toString() << dest.toString() << permissions << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
@@ -482,7 +482,7 @@ public:
             return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
-        qDebug() << path;
+        qCDebug(KIOADMIN_LOG) << path;
 
         OrgKdeKioAdminCopyCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
         connect(&iface, &OrgKdeKioAdminCopyCommandInterface::result, this, &AdminWorker::result);
@@ -494,7 +494,7 @@ public:
 
     WorkerResult get(const QUrl &url) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("get"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
@@ -502,7 +502,7 @@ public:
             return toFailure(reply);
         }
         const auto path = reply.arguments().at(0).value<QDBusObjectPath>().path();
-        qDebug() << path;
+        qCDebug(KIOADMIN_LOG) << path;
 
         OrgKdeKioAdminGetCommandInterface iface(serviceName(), path, QDBusConnection::systemBus(), this);
         connect(&iface, &OrgKdeKioAdminGetCommandInterface::data, this, [this](const QByteArray &blob) {
@@ -522,7 +522,7 @@ public:
     {
         Q_UNUSED(isFile);
 
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("del"));
         request << url.toString();
         auto reply = QDBusConnection::systemBus().call(request);
@@ -541,7 +541,7 @@ public:
 
     WorkerResult mkdir(const QUrl &url, int permissions) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("mkdir"));
         request << url.toString() << permissions;
         auto reply = QDBusConnection::systemBus().call(request);
@@ -560,7 +560,7 @@ public:
 
     WorkerResult rename(const QUrl &src, const QUrl &dest, JobFlags flags) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("rename"));
         request << src.toString() << dest.toString() << static_cast<int>(flags);
         auto reply = QDBusConnection::systemBus().call(request);
@@ -581,7 +581,7 @@ public:
 
     WorkerResult chmod(const QUrl &url, int permissions) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("chmod"));
         request << url.toString() << permissions;
         auto reply = QDBusConnection::systemBus().call(request);
@@ -600,7 +600,7 @@ public:
 
     WorkerResult chown(const QUrl &url, const QString &owner, const QString &group) override
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         auto request = QDBusMessage::createMethodCall(serviceName(), servicePath(), serviceInterface(), QStringLiteral("chown"));
         request << url.toString() << owner << group;
         auto reply = QDBusConnection::systemBus().call(request);
@@ -619,7 +619,7 @@ public:
 
     // WorkerResult setModificationTime(const QUrl &url, const QDateTime &mtime) override
     // {
-    //     qDebug() << Q_FUNC_INFO;
+    //     qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
     //     return WorkerResult::pass();
     // }
 
@@ -650,19 +650,19 @@ public:
 private Q_SLOTS:
     void entry(const KIO::UDSEntry &entry)
     {
-        qDebug() << Q_FUNC_INFO << entry;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO << entry;
         statEntry(entry);
     }
 
     void entries(const KIO::UDSEntryList &list)
     {
-        qDebug() << Q_FUNC_INFO;
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
         listEntries(list);
     }
 
     void result(int error, const QString &errorString)
     {
-        qDebug() << "RESULT" << error << errorString;
+        qCDebug(KIOADMIN_LOG) << "RESULT" << error << errorString;
         if (error != KJob::NoError) {
             m_result = WorkerResult::fail(error, errorString);
         } else {

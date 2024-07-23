@@ -7,8 +7,9 @@
 #include <QDBusContext>
 #include <QDBusMessage>
 #include <QDBusObjectPath>
-#include <QDebug>
 #include <QMetaMethod>
+
+#include "../kioadmin_debug.h"
 
 class KJob;
 

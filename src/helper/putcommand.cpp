@@ -15,7 +15,7 @@ PutCommand::PutCommand(const QUrl &url, int permissions, KIO::JobFlags flags, co
 
 void PutCommand::start()
 {
-    qDebug() << Q_FUNC_INFO;
+    qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
     if (!isAuthorized()) {
         sendErrorReply(QDBusError::AccessDenied);
         return;
@@ -24,20 +24,20 @@ void PutCommand::start()
     auto job = KIO::put(m_url, m_permissions, m_flags);
     setParent(job);
     connect(job, &KIO::TransferJob::dataReq, this, [this](KIO::Job *, QByteArray &data) {
-        qDebug() << Q_FUNC_INFO << "data request";
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO << "data request";
         sendSignal(&PutCommand::dataRequest);
         m_loop.exec();
         data = m_newData;
     });
     connect(job, &KIO::TransferJob::result, this, [this, job](KJob *) {
-        qDebug() << Q_FUNC_INFO << "result" << job->errorString();
+        qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO << "result" << job->errorString();
         sendSignal(&PutCommand::result, job->error(), job->errorString());
     });
 }
 
 void PutCommand::data(const QByteArray &data)
 {
-    qDebug() << Q_FUNC_INFO;
+    qCDebug(KIOADMIN_LOG) << Q_FUNC_INFO;
     if (!isAuthorized()) {
         sendErrorReply(QDBusError::AccessDenied);
         return;

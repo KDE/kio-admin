@@ -18,7 +18,9 @@ add_executable(kio-admin-helper
     putcommand.cpp
     renamecommand.cpp
     statcommand.cpp
-    ../dbustypes.cpp)
+    ../dbustypes.cpp
+    ../kioadmin_debug.cpp)
+    
 target_link_libraries(kio-admin-helper
     KF${QT_MAJOR_VERSION}::KIOCore
     PolkitQt${QT_MAJOR_VERSION}-1::Core)

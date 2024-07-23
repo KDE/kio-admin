@@ -28,7 +28,9 @@ generate_and_use_interfaces(
     renamecommand
     statcommand)
 
-kcoreaddons_add_plugin(admin SOURCES worker.cpp dbustypes.cpp ${admin_SRCS} INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kio")
+ecm_qt_declare_logging_category(admin  HEADER kioadmin_debug.h IDENTIFIER KIOADMIN_LOG CATEGORY_NAME org.kde.kio.admin)
+
+kcoreaddons_add_plugin(admin SOURCES  kioadmin_debug.cpp worker.cpp dbustypes.cpp ${admin_SRCS} INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kio")
 target_link_libraries(admin
     PUBLIC KF${QT_MAJOR_VERSION}::KIOCore
     PRIVATE atomic
