@@ -11,6 +11,7 @@
 #include <KIO/OpenFileManagerWindowJob>
 #include <KLocalizedString>
 #include <KPluginFactory>
+#include <KUser>
 
 class Plugin : public KAbstractFileItemActionPlugin
 {
@@ -28,9 +29,9 @@ public:
             return {};
         }
         const auto items = fileItemInfos.items();
-        if (std::all_of(items.cbegin(), items.cend(), [](const KFileItem &item) {
-                auto url = item.mostLocalUrl();
-                return url.path().startsWith(QDir::homePath());
+        const auto currentUserId = KUserId::currentUserId();
+        if (std::all_of(items.cbegin(), items.cend(), [&currentUserId](const KFileItem &item) {
+                return KUserId(item.userId()) == currentUserId;
             })) {
             return {};
         }
