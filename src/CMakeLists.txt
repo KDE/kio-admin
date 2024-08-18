@@ -34,6 +34,8 @@ kcoreaddons_add_plugin(admin SOURCES  kioadmin_debug.cpp worker.cpp dbustypes.cp
 target_link_libraries(admin
     PUBLIC KF${QT_MAJOR_VERSION}::KIOCore
     PRIVATE atomic
-    PolkitQt${QT_MAJOR_VERSION}-1::Core)
+    PolkitQt${QT_MAJOR_VERSION}-1::Core
+    Qt::Core
+    Qt::DBus)
 set_target_properties(admin PROPERTIES OUTPUT_NAME "admin")
 set_target_properties(admin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/kf${QT_MAJOR_VERSION}/kio")

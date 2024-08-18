@@ -23,7 +23,9 @@ add_executable(kio-admin-helper
     
 target_link_libraries(kio-admin-helper
     KF${QT_MAJOR_VERSION}::KIOCore
-    PolkitQt${QT_MAJOR_VERSION}-1::Core)
+    PolkitQt${QT_MAJOR_VERSION}-1::Core
+    Qt::Core
+    Qt::DBus)
 install(TARGETS kio-admin-helper DESTINATION ${KDE_INSTALL_LIBEXECDIR_KF})
 
 install(FILES org.kde.kio.admin.conf DESTINATION ${KDE_INSTALL_DBUSDIR}/system.d)
