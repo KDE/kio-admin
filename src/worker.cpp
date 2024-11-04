@@ -201,25 +201,34 @@ public:
     bool considerRemembering(ReadAuthorizationRequest request)
     {
         auto previousRequest = s_previousReadAuthorisationRequest.load();
-        while (previousRequest && !previousRequest->isStillRelevant()) {
+        while (!previousRequest || (previousRequest && !previousRequest->isStillRelevant())) {
             // The previousRequest is somewhat useless. We forget about it.
-            if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, std::nullopt)) {
-                // s_previousReadAuthorisationRequest was successfully set to std::nullopt
-                break;
+            // In normal code we would simply set it to zero/std::nullopt now. Unfortunately we are dealing with multi-threaded code here,
+            // so for synchonization reasons we do not want to have s_previousReadAuthorisationRequest unnecessarily empty even for a split second.
+            // So instead of setting it to std::nullopt unconditionally here, we replace it immediately with the current request if that makes sense.
+            // This fixes a random race condition that could lead to a second password prompt unnecessarily popping up after the first one was cancelled.
+            if (request.isStillRelevant()) {
+                auto requestCopy = request;
+                if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, requestCopy)) {
+                    // s_previousReadAuthorisationRequest was successfully set to request
+                    return true;
+                }
+            } else {
+                if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, std::nullopt)) {
+                    // s_previousReadAuthorisationRequest was successfully set to std::nullopt
+                    return false;
+                }
             }
+            // previousRequest was changed from somewhere else. The compare_exchange_strong call above has updated our local version of previousRequest to the
+            // current contents of s_previousReadAuthorisationRequest. So next the while-condition will check again if it is relevant now and try to replace it
+            // if it is not.
         }
 
         if (!request.isStillRelevant()) {
             return false;
         }
 
-        // If s_previousReadAuthorisationRequest is empty, assign the current request to it.
-        std::optional<ReadAuthorizationRequest> nulloptRequest = std::nullopt;
-        if (s_previousReadAuthorisationRequest.compare_exchange_strong(nulloptRequest, request)) {
-            return true;
-        }
-
-        if ((!previousRequest || !previousRequest->result()) && request.result()) {
+        if (!previousRequest->result() && request.result()) {
             // The previousRequest doesn't have a result yet which makes it less useful than a request with a result that isStillRelevant().
             if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, request)) {
                 return true;
@@ -229,7 +238,7 @@ public:
             return false;
         }
 
-        if (!previousRequest || !previousRequest->isSimilarTo(request)) {
+        if (!previousRequest->isSimilarTo(request)) {
             // The previous and the current request are different. Currently only remembering of a singular request is implemented, so now we do not care about
             // the older request anymore and replace it with the current request.
             if (s_previousReadAuthorisationRequest.compare_exchange_strong(previousRequest, request)) {
