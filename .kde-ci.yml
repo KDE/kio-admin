@@ -8,7 +8,7 @@ Dependencies:
     'frameworks/kio': '@latest'
     'libraries/polkit-qt-1': '@latest'
 
-- 'on': ['Linux/Qt6']
+- 'on': ['Linux/Qt6', 'Linux/Qt6Next']
   'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
     'frameworks/kio': '@latest-kf6'
