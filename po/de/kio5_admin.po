@@ -1,9 +1,7 @@
 # German translations for kio-admin package.
 # Copyright (C) 2022 This file is copyright:
 # This file is distributed under the same license as the kio-admin package.
-# Alois Spitzbart <spitz234@hotmail.com>, 2022.
-#
-# Automatically generated, 2022.
+# SPDX-FileCopyrightText: 2022 Alois Spitzbart <spitz234@hotmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kio5_admin\n"
