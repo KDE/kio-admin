@@ -30,12 +30,12 @@ generate_and_use_interfaces(
 
 ecm_qt_declare_logging_category(admin  HEADER kioadmin_debug.h IDENTIFIER KIOADMIN_LOG CATEGORY_NAME org.kde.kio.admin)
 
-kcoreaddons_add_plugin(admin SOURCES  kioadmin_debug.cpp worker.cpp dbustypes.cpp ${admin_SRCS} INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kio")
+kcoreaddons_add_plugin(admin SOURCES  kioadmin_debug.cpp worker.cpp dbustypes.cpp ${admin_SRCS} INSTALL_NAMESPACE "kf6/kio")
 target_link_libraries(admin
-    PUBLIC KF${QT_MAJOR_VERSION}::KIOCore
+    PUBLIC KF6::KIOCore
     PRIVATE atomic
-    PolkitQt${QT_MAJOR_VERSION}-1::Core
+    PolkitQt6-1::Core
     Qt::Core
     Qt::DBus)
 set_target_properties(admin PROPERTIES OUTPUT_NAME "admin")
-set_target_properties(admin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/kf${QT_MAJOR_VERSION}/kio")
+set_target_properties(admin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/kf6/kio")

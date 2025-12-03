@@ -689,30 +689,6 @@ private:
     inline static std::atomic<std::optional<ReadAuthorizationRequest>> s_previousReadAuthorisationRequest{};
 };
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-class KIOPluginFactory : public KIO::RealWorkerFactory
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.kio.worker.admin" FILE "admin.json")
-public:
-    std::unique_ptr<KIO::SlaveBase> createWorker(const QByteArray &pool, const QByteArray &app) override
-    {
-        Q_UNUSED(pool);
-        Q_UNUSED(app);
-        return {};
-    }
-
-    std::unique_ptr<KIO::WorkerBase> createRealWorker(const QByteArray &pool, const QByteArray &app) override
-    {
-        qRegisterMetaType<KIO::UDSEntryList>("KIO::UDSEntryList");
-        qDBusRegisterMetaType<KIO::UDSEntryList>();
-        qRegisterMetaType<KIO::UDSEntry>("KIO::UDSEntry");
-        qDBusRegisterMetaType<KIO::UDSEntry>();
-        return std::make_unique<AdminWorker>(QByteArrayLiteral("admin"), pool, app);
-    }
-};
-#else
-
 class KIOPluginFactory : public KIO::WorkerFactory
 {
     Q_OBJECT
@@ -727,7 +703,5 @@ public:
         return std::make_unique<AdminWorker>(QByteArrayLiteral("admin"), pool, app);
     }
 };
-
-#endif
 
 #include "worker.moc"
