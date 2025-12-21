@@ -7,4 +7,4 @@
 
 podir=${podir:?} # ensure it is defined
 
-$XGETTEXT $(find . -name \*.cpp -o -name \*.h) -o "$podir"/kio5_admin.pot
+$XGETTEXT $(find . -name \*.cpp -o -name \*.h) -o "$podir"/kio6_admin.pot
