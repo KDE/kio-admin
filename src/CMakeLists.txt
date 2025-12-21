@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
 
-add_definitions(-DTRANSLATION_DOMAIN=\"kio5_admin\")
+add_definitions(-DTRANSLATION_DOMAIN=\"kio6_admin\")
 
 add_subdirectory(fileaction)
 add_subdirectory(helper)
