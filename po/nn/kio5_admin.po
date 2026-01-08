@@ -1,4 +1,4 @@
-# Translation of kio5_admin to Norwegian Nynorsk
+# Translation of kio6_admin to Norwegian Nynorsk
 #
 # Karl Ove Hufthammer <karl@huftis.org>, 2022.
 msgid ""
