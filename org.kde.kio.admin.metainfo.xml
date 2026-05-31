@@ -29,6 +29,7 @@
   <name xml:lang="ie">KIO Admin</name>
   <name xml:lang="is">KIO-stjórnun</name>
   <name xml:lang="it">KIO Admin</name>
+  <name xml:lang="ja">KIO Admin</name>
   <name xml:lang="ka">KIO ადმინი</name>
   <name xml:lang="ko">KIO Admin</name>
   <name xml:lang="lt">KIO Admin</name>
@@ -65,6 +66,7 @@
   <summary xml:lang="ie">Provide un accesse administrativ por applicationes quel supporta KIO</summary>
   <summary xml:lang="is">Virkjar stjórnunaraðgang fyrir KIO-tengd forrit</summary>
   <summary xml:lang="it">Consente l'accesso amministrativo per le applicazioni abilitate per KIO</summary>
+  <summary xml:lang="ja">KIO 系アプリで管理者権限でのアクセスを可能にします</summary>
   <summary xml:lang="ka">ადმინისტრირების წვდომა KIO-ჩართული აპლიკაციებისთვის</summary>
   <summary xml:lang="ko">KIO를 사용하는 앱에서 관리자 접근 활성화</summary>
   <summary xml:lang="lt">Įgalina administravimo prieigą KIO įgalintoms programoms</summary>
@@ -102,6 +104,7 @@
     <p xml:lang="ie">KIO Admin es un plugin de KIO quel permisse a applicationes quel supporta KIO (quam Dolphin, Kate o Gwenview) acceder files quam li administrator (superusator).</p>
     <p xml:lang="is">KIO-stjórnun er KIO-verkferli sem virkjar stjórnunaraðgang fyrir KIO-tengd forrit (á borð við Dolphin, Kate eða Gwenview) þannig að þau hafi aðgang að skrám sem kerfisstjóri/root.</p>
     <p xml:lang="it">KIO Admin è un estensione del worker KIO che consente alle applicazioni compatibili con KIO (come Dolphin, Kate o Gwenview) di accedere ai file come amministratore/root.</p>
+    <p xml:lang="ja">KIO Admin は KIO 系アプリ (Dolphin や Kate, Gwenview 等) でファイルに管理者/ルート権限でアクセスできるようにする KIO ワーカープラグインです。</p>
     <p xml:lang="ka">KIOAdmin-ი KIO დამხმარე პროცესის დამატებას წარმოადგენს, რომლებიც აპლიკაციებს, რომლებმაც იციან, KIO რა არის (მაგ: Dolphin, Kate და Gwenview) ფაილებთან ადმინისტრატორის/root წვდომა იქონიონ.</p>
     <p xml:lang="ko">KIO Admin은 KIO를 사용할 수 있는 앱(Dolphin, Kate, Gwenview 등)에서 관리자/루트 권한으로 파일에 접근할 수 있는 KIO 워커 플러그인입니다.</p>
     <p xml:lang="lt">KIO Admin yra KIO darbininko įskiepis, kuris įgalina KIO sąmoningas programas (tokias kaip Dolphin, Kate ar Gwenview) gauti prieigą prie failų administratoriaus/pagrindinio naudotojo teisėmis.</p>
@@ -143,6 +146,7 @@
   <developer_name xml:lang="ie">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="is">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="it">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
+  <developer_name xml:lang="ja">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ka">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="ko">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
   <developer_name xml:lang="lt">Harald Sitter &lt;sitter@kde.org&gt;</developer_name>
