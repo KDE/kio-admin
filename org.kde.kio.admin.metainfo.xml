@@ -55,6 +55,7 @@
   <summary xml:lang="bg">Позволява административни права на приложения с KIO функции </summary>
   <summary xml:lang="ca">Habilita l'accés d'administració per a les aplicacions que permeten el KIO</summary>
   <summary xml:lang="ca-valencia">Habilita l'accés d'administració per a les aplicacions que permeten KIO</summary>
+  <summary xml:lang="cs">Umožňuje správcovský přístup k aplikacím podporujícím KIO</summary>
   <summary xml:lang="de">Systemverwalterrechte für KIO-fähige Anwendungen aktivieren</summary>
   <summary xml:lang="en-GB">Enables administrative access for KIO-enabled applications</summary>
   <summary xml:lang="eo">Ebligas administran aliron por KIO-povaj aplikaĵoj</summary>
@@ -94,6 +95,7 @@
     <p xml:lang="bg">KIO Admin е приставка за  KIO worker, която позволява административен достъп на приложения с KIO функции (като Dolphin, Kate или Gwenview).</p>
     <p xml:lang="ca">El KIO Admin és un connector de procés de treball KIO que habilita les aplicacions preparades per al KIO (com el Dolphin, Kate o Gwenview) accedeixin als fitxers com a administrador/root.</p>
     <p xml:lang="ca-valencia">KIO Admin és un connector de procés de treball KIO que habilita les aplicacions preparades per a KIO (com Dolphin, Kate o Gwenview) accedisquen als fitxers com a administrador/root.</p>
+    <p xml:lang="cs">KIO Admin je pracovní modul KIO, který umožňuje aplikacím podporujícím KIO (jako jsou Dolphin, Kate nebo Gwenview) přistupovat k souborům s oprávněními správce/root.</p>
     <p xml:lang="de">KIO-Admin ist ein Ein-/Ausgabemodul, mit dem Anwendungen wie Dolphin, Kate oder Gwenview als Systemverwalter auf Dateien zugreifen und bearbeiten können.</p>
     <p xml:lang="en-GB">KIO Admin is a KIO worker plugin that enables KIO-aware applications (such as Dolphin, Kate or Gwenview) to access files as administrator/root.</p>
     <p xml:lang="eo">KIO Admin estas KIO-laborista kromaĵo kiu ebligas KIO-konsciajn aplikojn (kiel Dolphin, Kate aŭ Gwenview) aliri dosierojn kiel administranto/radiko.</p>
