@@ -116,7 +116,7 @@
     <p xml:lang="ka">KIOAdmin-ი KIO დამხმარე პროცესის დამატებას წარმოადგენს, რომლებიც აპლიკაციებს, რომლებმაც იციან, KIO რა არის (მაგ: Dolphin, Kate და Gwenview) ფაილებთან ადმინისტრატორის/root წვდომა იქონიონ.</p>
     <p xml:lang="ko">KIO Admin은 KIO를 사용할 수 있는 앱(Dolphin, Kate, Gwenview 등)에서 관리자/루트 권한으로 파일에 접근할 수 있는 KIO 워커 플러그인입니다.</p>
     <p xml:lang="lt">KIO Admin yra KIO darbininko įskiepis, kuris įgalina KIO sąmoningas programas (tokias kaip Dolphin, Kate ar Gwenview) gauti prieigą prie failų administratoriaus/pagrindinio naudotojo teisėmis.</p>
-    <p xml:lang="nan-Latn-TW">KIO Admin sī tsi̍t-ê hōo tsai-iánn KIO ê îng-ióng-tîng-sik (tshiūnn Dolphin, Kate á-sī Gwenview) ē-sái iōng kuán-lí-uân / root sin-hūn lâi tsûn-tshú tóng-àn ê KIO worker guā-kuà-tîng-sik.</p>
+    <p xml:lang="nan-Latn-TW">KIO Admin sī tsi̍t-ê hōo tsai-iánn KIO ê ìng-iōng-tîng-sik (tshiūnn Dolphin, Kate á-sī Gwenview) ē-sái iōng kuán-lí-uân / root sin-hūn lâi tsûn-tshú tóng-àn ê KIO worker guā-kuà-tîng-sik.</p>
     <p xml:lang="nl">KIO Admin is een KIO-worker die met KIO bekende toepassingen (zoals Dolphin, Kate of Gwenview) toegang geeft tot bestanden als systeembeheerder/root.</p>
     <p xml:lang="nn">KIO Admin er ein KIO-arbeidar som lèt program som brukar KIO (for eksempel Dolphin, Kate og Gwenview) få lese- og skrivetilgang til filene som administrator/rotbrukar.</p>
     <p xml:lang="pl">KIO Admin jest wtyczką pracownika KIO, która daje aplikacjom z obsługą KIO (takim jak Dolphin, Kate czy Gwenview) dostęp do plików w trybie administratora.</p>
