@@ -10,9 +10,9 @@ Dependencies:
 
 - 'on': ['Linux/Qt6', 'Linux/Qt6Next']
   'require':
-    'frameworks/extra-cmake-modules': '@latest-kf6'
-    'frameworks/kio': '@latest-kf6'
-    'libraries/polkit-qt-1': '@latest-kf6'
+    'frameworks/extra-cmake-modules': 'Frameworks/6.24'
+    'frameworks/kio': 'Frameworks/6.24'
+    'libraries/polkit-qt-1': 'v0.200.0'
 
 Options:
   require-passing-tests-on: ['@all']
